@@ -1,35 +1,34 @@
-# AirMouse 
+# package
 
-### Alpha version
+An Electron application with React
 
-AirMouse redefines the way we interact with our computers. Built using Electron and Mediapipe, this application allows you to control your mouse pointer simply by pointing and gesturing with your fingers.
+## Recommended IDE Setup
 
-By leveraging the power of machine learning and computer vision, AirMouse translates your hand movements into mouse pointer movements and commands to no only enhances your productivity but also liberate you from the constraints of traditional input devices. Whether you're presenting, designing, coding, or just browsing, AirMouse provides a seamless and intuitive experience. It's not just a new way to control your computer - it's a whole new way to experience it.
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-## Demo
+## Project Setup
 
-https://github.com/Farid-Karimli/AirMouse/assets/72581377/6952cc14-41d6-4934-85a7-3d32a5f0b108
+### Install
 
-
-## Development and contributing
-
-Contributions are welcome! Follow the instructions below how to run the app. You need to have Node.js installed on your system.
-
-Clone the repo and install dependencies
-
-```
-git clone https://github.com/Farid-Karimli/AirMouse.git
-npm install
+```bash
+$ npm install
 ```
 
-To run the app:
+### Development
 
-```
-npm run start
+```bash
+$ npm run dev
 ```
 
-To build:
+### Build
 
-```
-npm make
+```bash
+# For windows
+$ npm run build:win
+
+# For macOS
+$ npm run build:mac
+
+# For Linux
+$ npm run build:linux
 ```
