@@ -27,7 +27,7 @@ async function moveMouse(handedness, landmarks) {
 
 async function detectClick(handedness, landmarks) {
   const distance = calculateDistance(
-    landmarks[id.THUMB_TIP], landmarks[id.INDEX_FINGER_TIP]
+    landmarks[id.THUMP_TIP], landmarks[id.INDEX_FINGER_TIP]
   );
 
   if (distance < 0.05) {
