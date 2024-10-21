@@ -2,10 +2,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Button from "@mui/material/Button";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import { HandLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+
 import Sidebar from "./components/Sidebar.jsx";
-import { moveMouse, detectClick } from "./mouseControl/main.js";
-import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
-import { configuration } from "./utils/config.js";
+import { configuration } from "../../utils/config.js";
 
 const App = () => {
   const [webcamRunning, setWebcamRunning] = useState(true);
@@ -97,21 +96,21 @@ const App = () => {
       // Test 1: The newResults object contains the coordenates
       console.log(newResults);
 
-      // Performance: Tratar de pasar newResults.landmarks en vez de
-      // solo las articulaciones de una mano.
       if (newResults.landmarks.length > 0) {
-        // Takes the first hand by default
-        const smoothed = movingAverageSmoothing(
+        const smoothed = await window.api.movingAverageSmoothing(
           newResults.landmarks[0],
           smoothedLandmarks,
           setSmoothedLandmarks,
           bufferSize
         );
 
-        moveMouse(newResults.handedness, smoothed);
+        await window.api.moveMouse(newResults.handedness, smoothed);
 
         if (newResults.landmarks.length > 1) {
-          detectClick(newResults.handedness, newResults.landmarks[1]);
+          await window.api.detectClick(
+            newResults.handedness,
+            newResults.landmarks[1]
+          );
         }
       }
     }
