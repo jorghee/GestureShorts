@@ -1,5 +1,5 @@
 import { mouse, Point, straightTo, screen } from "@nut-tree-fork/nut-js";
-import { id } from "../utils/utils.js";
+import { id } from "../../utils/utils.js";
 
 const calculateDistance = (point1, point2) => {
   return Math.sqrt(
