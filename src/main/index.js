@@ -3,8 +3,8 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 
-import { moveMouse, detectClick } from "./mouseControl/main";
-import { movingAverageSmoothing } from "./mouseControl/smoothing";
+import { moveMouse, detectClick } from "./mouseControl/main.js";
+import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
 
 function createWindow() {
   // Create the browser window.
@@ -52,40 +52,39 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
-
   createWindow();
+
+  // IPC test
+  // ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("move-mouse", async (event, handedness, landmarks) => {
+    return await moveMouse(handedness, landmarks);
+  });
+
+  ipcMain.handle("detect-click", async (event, handedness, landmarks) => {
+    return await detectClick(handedness, landmarks);
+  });
+
+  ipcMain.handle("average-smoothing", (
+    event,
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize,
+  ) => {
+    return movingAverageSmoothing(
+      newLandmarks,
+      smoothedLandmarks,
+      setSmoothedLandmarks,
+      bufferSize
+    );
+  });
 
   app.on("activate", function () {
     // On macOS it"s common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
-});
-
-// IPC Listeners to handle renderer requests
-ipcMain.handle("move-mouse", async (event, handedness, landmarks) => {
-  return await moveMouse(handedness, landmarks);
-});
-
-ipcMain.handle("detect-click", async (event, handedness, landmarks) => {
-  return await detectClick(handedness, landmarks);
-});
-
-ipcMain.handle("average-smoothing", (
-  event,
-  newLandmarks,
-  smoothedLandmarks,
-  setSmoothedLandmarks,
-  bufferSize,
-) => {
-  return movingAverageSmoothing(
-    newLandmarks,
-    smoothedLandmarks,
-    setSmoothedLandmarks,
-    bufferSize
-  );
 });
 
 // Quit when all windows are closed, except on macOS. There, it"s common
