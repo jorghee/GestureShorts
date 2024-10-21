@@ -3,11 +3,30 @@ import { electronAPI } from "@electron-toolkit/preload";
 
 // Custom APIs for renderer
 const api = {
-  invoke: (channel, data) => {
-    const validChannels = ["get-predict-webcam"];
-    if (validChannels.includes(channel))
-      return ipcRenderer.invoke(channel, data);
-  }
+  moveMouse: (handedness, smoothed) => ipcRenderer.send(
+    "moveMouse",
+    handedness,
+    smoothed
+  ),
+
+  detectClick: (handedness, landmark) => ipcRenderer.send(
+    "detectClick",
+    handedness,
+    landmark
+  ),
+
+  movingAverageSmoothing: (
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize
+  ) => ipcRenderer.send(
+    "movingAverageSmoothing",
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize
+  )
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
