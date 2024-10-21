@@ -2,9 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-
-import { moveMouse, detectClick } from "./mouseControl/main.js";
-import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
+import handleGesturePrediction from "./gestures/gestureController.js";
 
 function createWindow() {
   // Create the browser window.
@@ -54,30 +52,23 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  // IPC test
-  // ipcMain.on("ping", () => console.log("pong"));
-
-  ipcMain.handle("move-mouse", async (event, handedness, landmarks) => {
-    return await moveMouse(handedness, landmarks);
-  });
-
-  ipcMain.handle("detect-click", async (event, handedness, landmarks) => {
-    return await detectClick(handedness, landmarks);
-  });
-
-  ipcMain.handle("average-smoothing", (
+  ipcMain.handle("get-predict-webcam", (
     event,
-    newLandmarks,
-    smoothedLandmarks,
-    setSmoothedLandmarks,
+    handLandmarker,
+    video,
     bufferSize,
+    smoothedLandmarks,
+    setSmoothedLandmarks
   ) => {
-    return movingAverageSmoothing(
-      newLandmarks,
+    const predictWebcam = handleGesturePrediction(
+      handLandmarker,
+      video,
+      bufferSize,
       smoothedLandmarks,
-      setSmoothedLandmarks,
-      bufferSize
+      setSmoothedLandmarks
     );
+
+    return predictWebcam;
   });
 
   app.on("activate", function () {
