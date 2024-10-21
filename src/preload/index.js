@@ -1,8 +1,31 @@
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
 // Custom APIs for renderer
-const api = {};
+const api = {
+  moveMouse: (
+    handedness,
+    landmarks
+  ) => ipcRenderer.invoke("move-mouse", handedness, landmarks),
+
+  detectClick: (
+    handedness,
+    landmarks
+  ) => ipcRenderer.invoke("detect-click", handedness, landmarks),
+
+  smoothLandmarks: (
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize
+  ) => ipcRenderer.invoke(
+    "average-smoothing",
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize
+  ),
+};
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
