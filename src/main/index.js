@@ -3,6 +3,9 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 
+import { moveMouse, detectClick } from "./mouseControl/main";
+import { movingAverageSmoothing } from "./mouseControl/smoothing";
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -59,6 +62,30 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+});
+
+// IPC Listeners to handle renderer requests
+ipcMain.handle("move-mouse", async (event, handedness, landmarks) => {
+  return await moveMouse(handedness, landmarks);
+});
+
+ipcMain.handle("detect-click", async (event, handedness, landmarks) => {
+  return await detectClick(handedness, landmarks);
+});
+
+ipcMain.handle("average-smoothing", (
+  event,
+  newLandmarks,
+  smoothedLandmarks,
+  setSmoothedLandmarks,
+  bufferSize,
+) => {
+  return movingAverageSmoothing(
+    newLandmarks,
+    smoothedLandmarks,
+    setSmoothedLandmarks,
+    bufferSize
+  );
 });
 
 // Quit when all windows are closed, except on macOS. There, it"s common
