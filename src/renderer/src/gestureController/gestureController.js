@@ -9,17 +9,17 @@ const handleGesturePrediction = (
   setLastVideoTime
 ) => {
   const predictWebcam = async () => {
-    if (!handLandmarker.current || !video.current || video.current.readyState !== 4) {
+    if (!handLandmarker || !video || video.readyState !== 4) {
       console.log("Error of handLandmarker.current or video.current.");
       return;
     }
 
     const startTimeMs = performance.now();
 
-    if (lastVideoTime !== video.current.currentTime) {
-      setLastVideoTime(video.current.currentTime);
-      const newResults = await handLandmarker.current.detectForVideo(
-        video.current,
+    if (lastVideoTime !== video.currentTime) {
+      setLastVideoTime(video.currentTime);
+      const newResults = await handLandmarker.detectForVideo(
+        video,
         startTimeMs
       );
       console.log(newResults);
@@ -35,13 +35,16 @@ const handleGesturePrediction = (
         await window.api.moveMouse(newResults.handedness, smoothed);
 
         if (newResults.landmarks.length > 1) {
-          await window.api.detectClick(newResults.handedness, newResults.landmarks[1]);
+          await window.api.detectClick(
+            newResults.handedness,
+            newResults.landmarks[1]
+          );
         }
       }
     }
   };
 
-  animationFrame.current = window.requestAnimationFrame(predictWebcam);
+  animationFrame = window.requestAnimationFrame(predictWebcam);
   return predictWebcam;
 };
 

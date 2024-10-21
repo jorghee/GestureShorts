@@ -17,19 +17,18 @@ const App = () => {
   const handLandmarkerRef = useHandLandmarker();
   const animationFrame = useRef(null); // Track the animation
 
-  const predictWebcam = useCallback(
+  const predictWebcam = useCallback(() => {
     handleGesturePrediction(
-      handLandmarkerRef,
-      videoRef,
+      handLandmarkerRef.current,
+      videoRef.current,
       config.bufferSize,
       smoothedLandmarks,
       setSmoothedLandmarks,
-      animationFrame,
+      animationFrame.current,
       lastVideoTime,
-      setLastVideoTime,
-    ),
-    [handLandmarkerRef, videoRef, smoothedLandmarks, config]
-  );
+      setLastVideoTime
+    );
+  }, [handLandmarkerRef, videoRef, smoothedLandmarks, config]);
 
   const startDetection = () => {
     if (!handLandmarkerRef.current) {
