@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Button from "@mui/material/Button";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 
@@ -7,42 +7,46 @@ import { configuration } from "../../utils/config.js";
 
 import useWebcam from "./hooks/useWebcam.js";
 import useHandLandmarker from "./hooks/useHandLandmarker.js";
+import handleGesturePrediction from "./gestureController/gestureController.js";
 
 const App = () => {
   const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
-  const handLandmarkerRef = useHandLandmarker();
-  const [smoothedLandmarks, setSmoothedLandmarks] = useState([]);
+  const [lastVideoTime, setLastVideoTime] = useState(-1);
   const [config, setConfig] = useState(configuration);
+  const [smoothedLandmarks, setSmoothedLandmarks] = useState([]);
+  const handLandmarkerRef = useHandLandmarker();
+  const animationFrame = useRef(null); // Track the animation
 
-  const getPredictWebcam = useCallback(async () => {
-    if (!handLandmarkerRef.current || !videoRef.current) {
-      console.warn("El handLandmarker o el video no están listos");
+  const predictWebcam = useCallback(
+    handleGesturePrediction(
+      handLandmarkerRef,
+      videoRef,
+      config.bufferSize,
+      smoothedLandmarks,
+      setSmoothedLandmarks,
+      animationFrame,
+      lastVideoTime,
+      setLastVideoTime,
+    ),
+    [handLandmarkerRef, videoRef, smoothedLandmarks, config]
+  );
+
+  const startDetection = () => {
+    if (!handLandmarkerRef.current) {
+      console.log("Wait! handLandmarker not loaded yet.");
       return;
     }
 
-    try {
-      const predictWebcam = await window.api.invoke(
-        "get-predict-webcam",
-        handLandmarkerRef.current,
-        videoRef.current,
-        config.bufferSize,
-        smoothedLandmarks,
-        setSmoothedLandmarks
-      );
-
-      return predictWebcam;
-    } catch (error) {
-      console.error("Error al obtener predictWebcam:", error);
-    }
-  }, [handLandmarkerRef, videoRef, config, smoothedLandmarks]);
-
-  const startDetection = () => {
     setWebcamRunning((prevRunning) => {
       const newRunning = !prevRunning;
       const startButton = document.getElementById("start");
       startButton.innerText = newRunning ? "Stop" : "Start";
 
-      if (newRunning) getPredictWebcam();
+      if (newRunning) {
+        predictWebcam();
+      } else {
+        cancelAnimationFrame(animationFrame.current);
+      }
 
       return newRunning;
     });
