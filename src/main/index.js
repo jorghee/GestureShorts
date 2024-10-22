@@ -2,8 +2,9 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-import { moveMouse, detectClick } from "./mouseControl/main.js";
-// import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
+
+import { ac } from "./controls/availableControls.js";
+import { moveMouse } from "./controls/mouseTracking.js";
 
 function createWindow() {
   // Create the browser window.
@@ -54,13 +55,11 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.handle("moveMouse", async (event, handedness, smoothed) => {
-    const result = await moveMouse(handedness, smoothed);
-    return result;
+    await moveMouse(handedness, smoothed);
   });
 
-  ipcMain.handle("detectClick", async (event, handedness, landmark) => {
-    const result = await detectClick(handedness, landmark);
-    return result;
+  ipcMain.handle("performLeftClick", async (event, gestureStr, landmarks) => {
+    await ac.performLeftClick(gestureStr, landmarks);
   });
 
   app.on("activate", function () {
