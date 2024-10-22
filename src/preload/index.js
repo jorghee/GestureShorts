@@ -3,30 +3,11 @@ import { electronAPI } from "@electron-toolkit/preload";
 
 // Custom APIs for renderer
 const api = {
-  moveMouse: (handedness, smoothed) => ipcRenderer.send(
-    "moveMouse",
-    handedness,
-    smoothed
-  ),
+  moveMouse: (handedness, smoothed) =>
+    ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
-  detectClick: (handedness, landmark) => ipcRenderer.send(
-    "detectClick",
-    handedness,
-    landmark
-  ),
-
-  movingAverageSmoothing: (
-    newLandmarks,
-    smoothedLandmarks,
-    setSmoothedLandmarks,
-    bufferSize
-  ) => ipcRenderer.send(
-    "movingAverageSmoothing",
-    newLandmarks,
-    smoothedLandmarks,
-    setSmoothedLandmarks,
-    bufferSize
-  )
+  detectClick: (handedness, landmark) =>
+    ipcRenderer.invoke("detectClick", handedness, landmark)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
