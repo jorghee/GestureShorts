@@ -1,3 +1,5 @@
+import { movingAverageSmoothing } from "./smoothing.js";
+
 const handleGesturePrediction = (
   handLandmarker,
   video,
@@ -10,7 +12,7 @@ const handleGesturePrediction = (
 ) => {
   const predictWebcam = async () => {
     if (!handLandmarker || !video || video.readyState !== 4) {
-      console.log("Error of handLandmarker.current or video.current.");
+      console.log("Error of handLandmarker or video.");
       return;
     }
 
@@ -22,10 +24,9 @@ const handleGesturePrediction = (
         video,
         startTimeMs
       );
-      console.log(newResults);
 
       if (newResults.landmarks.length > 0) {
-        const smoothed = await window.api.movingAverageSmoothing(
+        const smoothed = movingAverageSmoothing(
           newResults.landmarks[0],
           smoothedLandmarks,
           setSmoothedLandmarks,
@@ -35,6 +36,7 @@ const handleGesturePrediction = (
         await window.api.moveMouse(newResults.handedness, smoothed);
 
         if (newResults.landmarks.length > 1) {
+          console.log(newResults.landmarks[1]);
           await window.api.detectClick(
             newResults.handedness,
             newResults.landmarks[1]
@@ -42,6 +44,7 @@ const handleGesturePrediction = (
         }
       }
     }
+    animationFrame = window.requestAnimationFrame(predictWebcam);
   };
 
   animationFrame = window.requestAnimationFrame(predictWebcam);
