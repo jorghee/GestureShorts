@@ -3,7 +3,7 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import { moveMouse, detectClick } from "./mouseControl/main.js";
-import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
+// import { movingAverageSmoothing } from "./mouseControl/smoothing.js";
 
 function createWindow() {
   // Create the browser window.
@@ -15,7 +15,7 @@ function createWindow() {
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
-      sandbox: false,
+      sandbox: false
     }
   });
 
@@ -53,27 +53,14 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  ipcMain.on("moveMouse", (event, handedness, smoothed) => {
-    moveMouse(handedness, smoothed);
+  ipcMain.handle("moveMouse", async (event, handedness, smoothed) => {
+    const result = await moveMouse(handedness, smoothed);
+    return result;
   });
 
-  ipcMain.on("detectClick", (event, handedness, landmark) => {
-    detectClick(handedness, landmark);
-  });
-
-  ipcMain.on("movingAverageSmoothing", (
-    event,
-    newLandmarks,
-    smoothedLandmarks,
-    setSmoothedLandmarks,
-    bufferSize
-  ) => {
-    movingAverageSmoothing(
-      newLandmarks,
-      smoothedLandmarks,
-      setSmoothedLandmarks,
-      bufferSize
-    );
+  ipcMain.handle("detectClick", async (event, handedness, landmark) => {
+    const result = await detectClick(handedness, landmark);
+    return result;
   });
 
   app.on("activate", function () {
