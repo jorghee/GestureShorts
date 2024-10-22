@@ -6,8 +6,8 @@ const api = {
   moveMouse: (handedness, smoothed) =>
     ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
-  detectClick: (handedness, landmark) =>
-    ipcRenderer.invoke("detectClick", handedness, landmark)
+  performLeftClick: (gestureStr, landmark) =>
+    ipcRenderer.invoke("performLeftClick", gestureStr, landmark)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
