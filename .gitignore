@@ -1,5 +1,13 @@
-node_modules
-dist
-out
+node_modules/
+build/
+dist/
+.vscode/
+out/
+*.env
+.eslintignore
+.prettierignore
+.editconfig
+dev-app-update.yml
+electron-builder.yml
 .DS_Store
 *.log*
