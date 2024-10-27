@@ -62,6 +62,10 @@ app.whenReady().then(() => {
     await ac.performLeftClick(gestureStr, landmarks);
   });
 
+  ipcMain.handle("captureScreen", async () => {
+    await captureFullScreen();
+  });
+
   app.on("activate", function () {
     // On macOS it"s common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
