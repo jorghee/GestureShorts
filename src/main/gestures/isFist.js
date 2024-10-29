@@ -8,7 +8,7 @@ export function isFist(landmarks) {
       Math.pow(p1.x - p2.x, 2) +
       Math.pow(p1.y - p2.y, 2)
     );
-    return dist < 0.1;
+    return dist < 0.05;
   };
 
   return isClose(thumbTip, indexTip) && isClose(thumbTip, middleTip);

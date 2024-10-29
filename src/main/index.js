@@ -5,6 +5,7 @@ import icon from "../../resources/icon.png?asset";
 
 import { ac } from "./controls/availableControls.js";
 import { moveMouse } from "./controls/mouseTracking.js";
+import { captureFullScreen } from "./controls/screenCapture.js";
 
 function createWindow() {
   // Create the browser window.
