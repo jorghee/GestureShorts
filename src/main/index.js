@@ -63,7 +63,7 @@ app.whenReady().then(() => {
     await ac.performLeftClick(gestureStr, landmarks);
   });
 
-  ipcMain.handle("captureScreen", async () => {
+  ipcMain.handle("captureScreen", async (event, gestureStr, landmarks) => {
     await captureFullScreen();
   });
 

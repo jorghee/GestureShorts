@@ -1,4 +1,3 @@
-// screenCapture.js
 import { screen } from "@nut-tree-fork/nut-js"; // `screen` es una instancia de `ScreenClass`
 
 export async function captureFullScreen() {
