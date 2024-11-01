@@ -15,6 +15,9 @@ export const isFist = (landmarks) => {
   };
 
   return (
+    isClose(thumbTip, indexTip) &&
+    isClose(thumbTip, middleTip) &&
+    isClose(thumbTip, ringTip) &&
     isClose(thumbTip, pinkyTip)
   );
 };
