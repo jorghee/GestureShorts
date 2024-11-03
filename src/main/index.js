@@ -5,7 +5,6 @@ import icon from "../../resources/icon.png?asset";
 
 import { ac } from "./controls/availableControls.js";
 import { moveMouse } from "./controls/mouseTracking.js";
-import { captureFullScreen } from "./controls/screenCapture.js";
 
 function createWindow() {
   // Create the browser window.
@@ -63,8 +62,8 @@ app.whenReady().then(() => {
     await ac.performLeftClick(gestureStr, landmarks);
   });
 
-  ipcMain.handle("captureScreen", async (event, gestureStr, landmarks) => {
-    await captureFullScreen();
+  ipcMain.handle("performScreenCapture", async (event, gestureStr, landmarks) => {
+    await ac.performScreenCapture(gestureStr, landmarks);
   });
 
   app.on("activate", function () {

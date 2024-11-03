@@ -7,7 +7,7 @@ export const isFist = (landmarks) => {
   const ringTip = landmarks[id.RING_FINGER_TIP];
   const pinkyTip = landmarks[id.PINKY_TIP];
 
-  const isClose = (point1, point2, threshold = 0.1) => {
+  const isClose = (point1, point2, threshold = 0.05) => {
     const distance = Math.sqrt(
       Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2)
     );

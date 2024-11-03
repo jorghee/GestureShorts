@@ -36,7 +36,10 @@ const handleGesturePrediction = (
         await window.api.moveMouse(newResults.handedness, smoothed);
 
         if (newResults.landmarks.length > 1) {
-          await window.api.performLeftClick("isPinch", newResults.landmarks[1]);
+          await Promise.all([
+            window.api.performLeftClick("isPinch", newResults.landmarks[1]),
+            window.api.performScreenCapture("isFist", newResults.landmarks[1])
+          ]);
         }
       }
     }
