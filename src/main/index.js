@@ -64,6 +64,9 @@ app.whenReady().then(() => {
 
   ipcMain.handle("performScreenCapture", async (event, gestureStr, landmarks) => {
     await ac.performScreenCapture(gestureStr, landmarks);
+
+  ipcMain.handle("performRightClick", async (event, gestureStr, landmarks) => {
+    await ac.performRightClick(gestureStr, landmarks);
   });
 
   app.on("activate", function () {
