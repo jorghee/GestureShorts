@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
-import performScreenCapture from "../main/controls/performScreenCapture";
 
 // Custom APIs for renderer
 const api = {
@@ -11,7 +10,7 @@ const api = {
     ipcRenderer.invoke("performLeftClick", gestureStr, landmark),
 
   performScreenCapture: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performScreenCapture", gestureStr, landmark)
+    ipcRenderer.invoke("performScreenCapture", gestureStr, landmark),
 
   performRightClick: (gestureStr, landmark) =>
     ipcRenderer.invoke("performRightClick", gestureStr, landmark)

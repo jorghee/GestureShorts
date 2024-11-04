@@ -38,7 +38,7 @@ const handleGesturePrediction = (
         if (newResults.landmarks.length > 1) {
           await Promise.all([
             window.api.performLeftClick("isPinch", newResults.landmarks[1]),
-            window.api.performScreenCapture("isFist", newResults.landmarks[1])
+            window.api.performScreenCapture("isFist", newResults.landmarks[1]),
             window.api.performRightClick("isRightPinch", newResults.landmarks[1])
 
           ]);
