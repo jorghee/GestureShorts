@@ -5,7 +5,7 @@ const performScrollDown = async (gestureStr, landmarks) => {
     const gesture = ag.get(gestureStr);
 
     if (gesture && gesture(landmarks)) {
-        await mouse.scrollDown(50);
+        await mouse.scrollDown(75);
     }
 };
 
