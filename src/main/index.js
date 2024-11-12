@@ -70,6 +70,15 @@ app.whenReady().then(() => {
   ipcMain.handle("performRightClick", async (event, gestureStr, landmarks) => {
     await ac.performRightClick(gestureStr, landmarks);
   });
+
+  ipcMain.handle("performScrollDown", async (event, gestureStr, landmarks) => {
+    await ac.performScrollDown(gestureStr, landmarks);
+  });
+
+  ipcMain.handle("performScrollUp", async (event, gestureStr, landmarks) => {
+    await ac.performScrollUp(gestureStr, landmarks);
+  });
+
 });
 
   app.on("activate", function () {

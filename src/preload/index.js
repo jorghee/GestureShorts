@@ -13,7 +13,14 @@ const api = {
     ipcRenderer.invoke("performScreenCapture", gestureStr, landmark),
 
   performRightClick: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performRightClick", gestureStr, landmark)
+    ipcRenderer.invoke("performRightClick", gestureStr, landmark),
+
+  performScrollUp: (gestureStr, landmark) =>
+    ipcRenderer.invoke("performScrollUp", gestureStr, landmark),
+
+  performScrollDown: (gestureStr, landmark) =>
+    ipcRenderer.invoke("performScrollDown", gestureStr, landmark)
+
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

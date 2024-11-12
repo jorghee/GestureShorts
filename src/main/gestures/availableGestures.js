@@ -1,10 +1,14 @@
 import { isPinch } from "./isPinch.js";
 import { isFist } from "./isFist.js";
 import { isRightPinch } from "./isRightPinch.js";
+import { isWristExtensionBackward } from "./isWristExtensionBackward.js";
+import { isWristFlexionForward } from "./isWristFlexionForward.js";
 
 export const ag = new Map([
     ["isPinch", isPinch], 
     ["isFist", isFist],
-    ["isRightPinch", isRightPinch]
+    ["isRightPinch", isRightPinch],
+    ["isWristExtensionBackward", isWristExtensionBackward],
+    ["isWristFlexionForward", isWristFlexionForward]
 ]);
 
