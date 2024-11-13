@@ -1,4 +1,4 @@
-export const configuration = {
+const configuration = {
   clickGesture: "index-thumb-pinch",
   clickGestureThreshold: 0.5,
 
@@ -6,3 +6,5 @@ export const configuration = {
   smoothness: 0.2, // alpha for exponential smoothing
   bufferSize: 5 // buffer size for moving average smoothing
 };
+
+export default configuration;
