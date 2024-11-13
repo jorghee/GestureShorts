@@ -1,35 +1,25 @@
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import Button from "@mui/material/Button";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 
-import { configuration } from "../../utils/config.js";
-
 import useWebcam from "./hooks/useWebcam.js";
 import useHandLandmarker from "./hooks/useHandLandmarker.js";
+import configuration from "../../utils/config.js";
 import handleGesturePrediction from "./gestureController/gestureController.js";
 
 const App = () => {
   const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
-  const [lastVideoTime, setLastVideoTime] = useState(-1);
-  const [config, setConfig] = useState(configuration);
-  const [smoothedLandmarks, setSmoothedLandmarks] = useState([]);
   const handLandmarkerRef = useHandLandmarker();
-  const animationFrame = useRef(null); // Track the animation
-
-  console.log("Renderizando...");
+  const animationFrameRef = useRef(null); // Track the animation
 
   const predictWebcam = useCallback(() => {
     handleGesturePrediction(
-      handLandmarkerRef.current,
-      videoRef.current,
-      config.bufferSize,
-      smoothedLandmarks,
-      setSmoothedLandmarks,
-      animationFrame.current,
-      lastVideoTime,
-      setLastVideoTime
+      handLandmarkerRef,
+      videoRef,
+      configuration.bufferSize,
+      animationFrameRef
     );
-  }, [handLandmarkerRef, videoRef, smoothedLandmarks, config]);
+  }, [handLandmarkerRef, videoRef]);
 
   const startDetection = () => {
     if (!handLandmarkerRef.current) {
@@ -37,18 +27,16 @@ const App = () => {
       return;
     }
 
-    setWebcamRunning((prevRunning) => {
-      if (prevRunning) {
-        predictWebcam();
-      } else if (animationFrame.current) {
-        cancelAnimationFrame(animationFrame.current);
-      }
+    if (isWebcamRunning) {
+      predictWebcam();
+    } else if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
 
-      const startButton = document.getElementById("start");
-      startButton.innerText = prevRunning ? "CANCELAR" : "COMENZAR";
+    const startButton = document.getElementById("start");
+    startButton.innerText = isWebcamRunning ? "CANCELAR" : "COMENZAR";
 
-      return !prevRunning;
-    });
+    setWebcamRunning(!isWebcamRunning);
   };
 
   return (
