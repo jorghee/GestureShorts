@@ -1,27 +1,30 @@
 import { movingAverageSmoothing } from "./smoothing.js";
 
 const handleGesturePrediction = (
-  handLandmarker,
-  video,
+  handLandmarkerRef,
+  videoRef,
   bufferSize,
-  smoothedLandmarks,
-  setSmoothedLandmarks,
-  animationFrame,
-  lastVideoTime,
-  setLastVideoTime
+  animationFrameRef
 ) => {
+  let lastVideoTime = -1;
+  let smoothedLandmarks = [];
+
   const predictWebcam = async () => {
-    if (!handLandmarker || !video || video.readyState !== 4) {
-      console.log("Error of handLandmarker or video.");
+    if (
+      !handLandmarkerRef.current ||
+      !videoRef.current ||
+      videoRef.current.readyState !== 4
+    ) {
+      console.log("Error of handLandmarker or videoRef.");
       return;
     }
 
     const startTimeMs = performance.now();
 
-    if (lastVideoTime !== video.currentTime) {
-      setLastVideoTime(video.currentTime);
-      const newResults = await handLandmarker.detectForVideo(
-        video,
+    if (lastVideoTime !== videoRef.current.currentTime) {
+      lastVideoTime = videoRef.current.currentTime;
+      const newResults = await handLandmarkerRef.current.detectForVideo(
+        videoRef.current,
         startTimeMs
       );
 
@@ -29,7 +32,6 @@ const handleGesturePrediction = (
         const smoothed = movingAverageSmoothing(
           newResults.landmarks[0],
           smoothedLandmarks,
-          setSmoothedLandmarks,
           bufferSize
         );
 
@@ -39,17 +41,19 @@ const handleGesturePrediction = (
           await Promise.all([
             window.api.performLeftClick("isPinch", newResults.landmarks[1]),
             window.api.performScreenCapture("isFist", newResults.landmarks[1]),
-            window.api.performRightClick("isRightPinch", newResults.landmarks[1])
-
+            window.api.performRightClick(
+              "isRightPinch",
+              newResults.landmarks[1]
+            )
           ]);
         }
       }
     }
-    animationFrame = window.requestAnimationFrame(predictWebcam);
+
+    animationFrameRef.current = requestAnimationFrame(predictWebcam);
   };
 
-  animationFrame = window.requestAnimationFrame(predictWebcam);
-  return predictWebcam;
+  predictWebcam();
 };
 
 export default handleGesturePrediction;
