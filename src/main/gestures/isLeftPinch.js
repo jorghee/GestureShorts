@@ -1,6 +1,6 @@
 import { id } from "../../utils/utils.js";
 
-export const isPinch = (landmarks) => {
+export const isLeftPinch = (landmarks) => {
   const thumbTip = landmarks[id.THUMB_TIP];
   const indexTip = landmarks[id.INDEX_FINGER_TIP];
 
