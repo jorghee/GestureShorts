@@ -2,7 +2,6 @@ import { useState, useCallback, useRef } from "react";
 import Button from "@mui/material/Button";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 
-import Sidebar from "./components/Sidebar.jsx";
 import { configuration } from "../../utils/config.js";
 
 import useWebcam from "./hooks/useWebcam.js";
@@ -16,6 +15,8 @@ const App = () => {
   const [smoothedLandmarks, setSmoothedLandmarks] = useState([]);
   const handLandmarkerRef = useHandLandmarker();
   const animationFrame = useRef(null); // Track the animation
+
+  console.log("Renderizando...");
 
   const predictWebcam = useCallback(() => {
     handleGesturePrediction(
@@ -37,17 +38,16 @@ const App = () => {
     }
 
     setWebcamRunning((prevRunning) => {
-      const newRunning = !prevRunning;
-      const startButton = document.getElementById("start");
-      startButton.innerText = newRunning ? "Stop" : "Start";
-
-      if (newRunning) {
+      if (prevRunning) {
         predictWebcam();
-      } else {
+      } else if (animationFrame.current) {
         cancelAnimationFrame(animationFrame.current);
       }
 
-      return newRunning;
+      const startButton = document.getElementById("start");
+      startButton.innerText = prevRunning ? "CANCELAR" : "COMENZAR";
+
+      return !prevRunning;
     });
   };
 
@@ -56,25 +56,16 @@ const App = () => {
       <header>
         <p>Gesture Shorts</p>
       </header>
-      <div id="content">
-        <Sidebar config={config} setConf={setConfig} />
-        <div id="camera">
-          <video
-            autoPlay={true}
-            width={800}
-            height={400}
-            id="video"
-            style={{ transform: "scaleX(-1)" }}
-          ></video>
-          <Button
-            id="start"
-            variant="contained"
-            startIcon={<PlayArrow />}
-            onClick={startDetection}
-          >
-            Start
-          </Button>
-        </div>
+      <div id="home">
+        <video autoPlay={true} width={400} height={200} id="video"></video>
+        <Button
+          id="start"
+          variant="contained"
+          startIcon={<PlayArrow />}
+          onClick={startDetection}
+        >
+          COMENZAR
+        </Button>
       </div>
     </>
   );
