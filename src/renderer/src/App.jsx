@@ -7,10 +7,14 @@ import useHandLandmarker from "./hooks/useHandLandmarker.js";
 import configuration from "../../utils/config.js";
 import handleGesturePrediction from "./gestureController/gestureController.js";
 
+import { useNavigate } from "react-router-dom";
+
 const App = () => {
   const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
   const handLandmarkerRef = useHandLandmarker();
   const animationFrameRef = useRef(null); // Track the animation
+
+  const navigate = useNavigate();
 
   const predictWebcam = useCallback(() => {
     handleGesturePrediction(
@@ -54,6 +58,7 @@ const App = () => {
         >
           COMENZAR
         </Button>
+        <Button onClick={() => navigate("/mapper")}>Configurar Gestos</Button>
       </div>
     </>
   );
