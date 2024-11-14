@@ -3,7 +3,8 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 
-import { ac } from "./controls/availableControls.js";
+import ac from "./controls/availableControls.js";
+import ag from "./gestures/availableGestures.js";
 import { moveMouse } from "./controls/mouseTracking.js";
 
 function createWindow() {
@@ -59,24 +60,19 @@ app.whenReady().then(() => {
     await moveMouse(handedness, smoothed);
   });
 
-  ipcMain.handle("performLeftClick", async (event, gestureStr, landmarks) => {
-    await ac.performLeftClick(gestureStr, landmarks);
-  });
-
-  ipcMain.handle("performScreenCapture", async (event, gestureStr, landmarks) => {
-    await ac.performScreenCapture(gestureStr, landmarks);
-  });
-
-  ipcMain.handle("performRightClick", async (event, gestureStr, landmarks) => {
-    await ac.performRightClick(gestureStr, landmarks);
-  });
+  for (const [controlStr, controlFunction] of ac.entries()) {
+    ipcMain.handle(controlStr, async (event, gestureStr, landmarks) => {
+      const gestureFunction = ag.get(gestureStr);
+      await controlFunction(gestureFunction, landmarks);
+    });
+  }
 });
 
-  app.on("activate", function () {
-    // On macOS it"s common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+app.on("activate", function () {
+  // On macOS it"s common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it"s common
 // for applications and their menu bar to stay active until the user quits
