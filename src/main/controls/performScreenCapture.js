@@ -1,9 +1,6 @@
-import { ag } from "../gestures/availableGestures.js";
 import { captureFullScreen } from "./screenCapture.js";
 
-const performScreenCapture = async (gestureStr, landmarks) => {
-  const gesture = ag.get(gestureStr);
-
+const performScreenCapture = async (gesture, landmarks) => {
   if (gesture && gesture(landmarks)) {
     await captureFullScreen();
   }

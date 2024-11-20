@@ -5,7 +5,7 @@ export async function captureFullScreen() {
   try {
     const fileName = "full-screen-capture";
     const fileFormat = FileType.PNG; // Usa FileType.PNG o FileType.JPG según sea necesario
-    const filePath = "./Capturas";           // Directorio donde se guardará la captura
+    const filePath = "./Capturas"; // Directorio donde se guardará la captura
     const fileNamePrefix = "capture_";
     const fileNamePostfix = `_${Date.now()}`; // Postfijo con la marca de tiempo
 

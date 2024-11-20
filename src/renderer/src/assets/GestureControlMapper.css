@@ -1,0 +1,91 @@
+.gesture-control-mapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #3366cc;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.options-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.gestures, .controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.option-button {
+  width: 200px;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f0e68c;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.option-button.selected {
+  background-color: #ffcc00;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.button {
+  width: 100px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.terminate {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.reset {
+  background-color: #cc66cc;
+  color: #fff;
+}
+
+.confirm {
+  background-color: #66cc66;
+  color: #fff;
+}
+
+.mappings {
+  text-align: center;
+}
+
+.mapping-item {
+  font-size: 16px;
+  margin: 5px 0;
+}

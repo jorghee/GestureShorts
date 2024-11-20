@@ -1,20 +1,37 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import ac from "../main/controls/availableControls.js";
+import ag from "../main/gestures/availableGestures.js";
+
+const gesturesD = ["Pinch izquierdo", "Pinch derecho", "Puño"];
+const controlsD = ["Clic izquierdo", "Clic derecho", "Captura de pantalla"];
+
+const gestureDisplayNames = new Map();
+const controlDisplayNames = new Map();
+
+let i = 0;
+for (const [controlStr] of ac.entries()) {
+  controlDisplayNames.set(controlsD[i++], controlStr);
+}
+
+i = 0;
+for (const [gestureStr] of ag.entries()) {
+  gestureDisplayNames.set(gesturesD[i++], gestureStr);
+}
 
 // Custom APIs for renderer
 const api = {
   moveMouse: (handedness, smoothed) =>
     ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
-  performLeftClick: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performLeftClick", gestureStr, landmark),
-
-  performScreenCapture: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performScreenCapture", gestureStr, landmark),
-
-  performRightClick: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performRightClick", gestureStr, landmark)
+  getControlDisplayNames: () => controlDisplayNames,
+  getGestureDisplayNames: () => gestureDisplayNames
 };
+
+for (const [controlStr] of ac.entries()) {
+  api[controlStr] = (gestureStr, landmarks) =>
+    ipcRenderer.invoke(controlStr, gestureStr, landmarks);
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
