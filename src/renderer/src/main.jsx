@@ -15,8 +15,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/mapper"
           element={
             <GestureControlMapper
-              getGestureDisplayNames={window.api.getGestureDisplayNames}
-              getControlDisplayNames={window.api.getControlDisplayNames}
+              getGestures={window.api.getGestures}
+              getControls={window.api.getControls}
             />
           }
         />

@@ -3,8 +3,8 @@ import performScreenCapture from "./performScreenCapture.js";
 import performRightClick from "./performRightClick.js";
 
 const ac = new Map();
-ac.set("performLeftClick", performLeftClick);
-ac.set("performRightClick", performRightClick);
-ac.set("performScreenCapture", performScreenCapture);
+ac.set("Clic izquierdo", performLeftClick);
+ac.set("Clic derecho", performRightClick);
+ac.set("Captura de pantalla", performScreenCapture);
 
 export default ac;
