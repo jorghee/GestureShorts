@@ -2,37 +2,35 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/GestureControlMapper.css";
 
-const GestureControlMapper = ({
-  getGestureDisplayNames,
-  getControlDisplayNames
-}) => {
+const GestureControlMapper = ({ getGestures, getControls }) => {
+  console.log("Render component.");
+
   const navigate = useNavigate();
   const [gestureOptions, setGestureOptions] = useState([]);
   const [controlOptions, setControlOptions] = useState([]);
   const [selectedGesture, setSelectedGesture] = useState("");
   const [selectedControl, setSelectedControl] = useState("");
-  const [mappings, setMappings] = useState([]);
+  const [mappings, setMappings] = useState(new Map());
 
   useEffect(() => {
-    const gestures = Array.from(getGestureDisplayNames().entries());
-    const controls = Array.from(getControlDisplayNames().entries());
-    setGestureOptions(gestures);
-    setControlOptions(controls);
-  }, [getGestureDisplayNames, getControlDisplayNames]);
+    setGestureOptions(getGestures());
+    setControlOptions(getControls());
+  }, [getGestures, getControls]);
 
   const handleSaveMapping = () => {
     if (selectedGesture && selectedControl) {
-      setMappings((prev) => [
-        ...prev,
-        { gesture: selectedGesture, control: selectedControl }
-      ]);
+      setMappings((prev) => {
+        const newMapping = new Map(prev);
+        newMapping.set(selectedGesture, selectedControl);
+        return newMapping;
+      });
       setSelectedGesture("");
       setSelectedControl("");
     }
   };
 
   const handleResetMappings = () => {
-    setMappings([]);
+    setMappings(new Map());
   };
 
   const handleTerminate = () => {
@@ -46,11 +44,11 @@ const GestureControlMapper = ({
       <div className="options-container">
         <div className="gestures">
           <h3>Gestos</h3>
-          {gestureOptions.map(([displayName, gesture]) => (
+          {gestureOptions.map((displayName) => (
             <button
-              key={gesture}
-              className={`option-button ${selectedGesture === gesture ? "selected" : ""}`}
-              onClick={() => setSelectedGesture(gesture)}
+              key={crypto.randomUUID()}
+              className={`option-button ${selectedGesture === displayName ? "selected" : ""}`}
+              onClick={() => setSelectedGesture(displayName)}
             >
               {displayName}
             </button>
@@ -59,11 +57,11 @@ const GestureControlMapper = ({
 
         <div className="controls">
           <h3>Controles</h3>
-          {controlOptions.map(([displayName, control]) => (
+          {controlOptions.map((displayName) => (
             <button
-              key={control}
-              className={`option-button ${selectedControl === control ? "selected" : ""}`}
-              onClick={() => setSelectedControl(control)}
+              key={crypto.randomUUID()}
+              className={`option-button ${selectedControl === displayName ? "selected" : ""}`}
+              onClick={() => setSelectedControl(displayName)}
             >
               {displayName}
             </button>
@@ -90,19 +88,9 @@ const GestureControlMapper = ({
       <div className="mappings">
         <h3>Mapeos actuales:</h3>
         <ul>
-          {mappings.map((map, index) => (
-            <li key={index} className="mapping-item">
-              {
-                gestureOptions.find(
-                  ([_, gesture]) => gesture === map.gesture
-                )[0]
-              }
-              →
-              {
-                controlOptions.find(
-                  ([_, control]) => control === map.control
-                )[0]
-              }
+          {Array.from(mappings).map(([gesture, control]) => (
+            <li key={crypto.randomUUID()} className="mapping-item">
+              {gesture} → {control}
             </li>
           ))}
         </ul>
