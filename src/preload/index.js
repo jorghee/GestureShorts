@@ -9,7 +9,9 @@ const api = {
     ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
   getGestures: () => [...ac.keys()],
-  getControls: () => [...ag.keys()]
+  getControls: () => [...ag.keys()],
+  loadMappings: () => ipcRenderer.invoke("loadMappings"),
+  saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings)
 };
 
 for (const [controlStr] of ac.entries()) {

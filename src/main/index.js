@@ -7,6 +7,8 @@ import ac from "./controls/availableControls.js";
 import ag from "./gestures/availableGestures.js";
 import { moveMouse } from "./controls/mouseTracking.js";
 
+import { saveMappings, loadMappings } from "./mappingHandler/mappingHandler.js";
+
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -55,6 +57,23 @@ app.whenReady().then(() => {
   });
 
   createWindow();
+
+  ipcMain.handle("loadMappings", async () => {
+    try {
+      return await loadMappings(ac, ag);
+    } catch (error) {
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle("saveMappings", async (event, newMappings) => {
+    try {
+      await saveMappings(newMappings);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  });
 
   ipcMain.handle("moveMouse", async (event, handedness, smoothed) => {
     await moveMouse(handedness, smoothed);
