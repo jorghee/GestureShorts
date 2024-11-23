@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/GestureControlMapper.css";
 
-const GestureControlMapper = ({ getGestures, getControls }) => {
-  console.log("Render component.");
-
+const GestureControlMapper = () => {
   const navigate = useNavigate();
   const [gestureOptions, setGestureOptions] = useState([]);
   const [controlOptions, setControlOptions] = useState([]);
@@ -13,9 +11,21 @@ const GestureControlMapper = ({ getGestures, getControls }) => {
   const [mappings, setMappings] = useState(new Map());
 
   useEffect(() => {
-    setGestureOptions(getGestures());
-    setControlOptions(getControls());
-  }, [getGestures, getControls]);
+    setGestureOptions(window.api.getGestures());
+    setControlOptions(window.api.getControls());
+
+    const loadDefaultMappings = async () => {
+      const defaultMappings = await window.api.loadMappings();
+      if (defaultMappings) {
+        setMappings(defaultMappings);
+        console.log("Mappings loaded successfully!");
+      } else {
+        console.error("Error loading default mappings:", defaultMappings.error);
+      }
+    };
+
+    loadDefaultMappings();
+  }, []);
 
   const handleSaveMapping = () => {
     if (selectedGesture && selectedControl) {
@@ -33,7 +43,14 @@ const GestureControlMapper = ({ getGestures, getControls }) => {
     setMappings(new Map());
   };
 
-  const handleTerminate = () => {
+  const handleTerminate = async () => {
+    const result = await window.api.saveMappings(mappings);
+    if (result.success) {
+      console.log("Mappings saved successfully!");
+    } else {
+      console.log("Error saving mappings:", result.error);
+    }
+
     navigate("/"); // Back to App.js
   };
 
