@@ -60,7 +60,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle("loadMappings", async () => {
     try {
-      return await loadMappings(ac, ag);
+      return await loadMappings(ag, ac);
     } catch (error) {
       return { error: error.message };
     }

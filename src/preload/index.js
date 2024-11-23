@@ -8,8 +8,8 @@ const api = {
   moveMouse: (handedness, smoothed) =>
     ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
-  getGestures: () => [...ac.keys()],
-  getControls: () => [...ag.keys()],
+  getGestures: () => [...ag.keys()],
+  getControls: () => [...ac.keys()],
   loadMappings: () => ipcRenderer.invoke("loadMappings"),
   saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings)
 };
