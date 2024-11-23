@@ -55,29 +55,31 @@ const GestureControlMapper = () => {
   };
 
   return (
-    <div className="gesture-control-mapper">
-      <h2 className="title">Relacionar Gestos con Controles</h2>
 
-      <div className="options-container">
-        <div className="gestures">
-          <h3>Gestos</h3>
-          {gestureOptions.map((displayName) => (
-            <button
-              key={crypto.randomUUID()}
-              className={`option-button ${selectedGesture === displayName ? "selected" : ""}`}
-              onClick={() => setSelectedGesture(displayName)}
-            >
-              {displayName}
-            </button>
-          ))}
+    <>
+      <main>
+      <h1 class="tituloRelacionar">RELACIONAR GESTOS CON CONTROLES</h1>
+      <div class = "contenedor">
+
+        <div class = "gestos">
+          <h2 class = "subTitulo" >GESTOS</h2>
+            {gestureOptions.map((displayName) => (
+              <button
+                key={crypto.randomUUID()}
+                className={`botonesGestosControles ${selectedGesture === displayName ? "selected" : ""}`}
+                onClick={() => setSelectedGesture(displayName)}
+              >
+                {displayName}
+              </button>
+            ))}
         </div>
-
-        <div className="controls">
-          <h3>Controles</h3>
+            
+        <div class = "controles">
+          <h2 class = "subTitulo" >CONTROLES</h2>
           {controlOptions.map((displayName) => (
             <button
               key={crypto.randomUUID()}
-              className={`option-button ${selectedControl === displayName ? "selected" : ""}`}
+              className={`botonesGestosControles ${selectedControl === displayName ? "selected" : ""}`}
               onClick={() => setSelectedControl(displayName)}
             >
               {displayName}
@@ -85,34 +87,29 @@ const GestureControlMapper = () => {
           ))}
         </div>
       </div>
-
-      <div className="buttons-container">
-        <button className="button terminate" onClick={handleTerminate}>
-          Terminar
-        </button>
-        <button className="button reset" onClick={handleResetMappings}>
-          Reiniciar
-        </button>
-        <button
-          className="button confirm"
-          onClick={handleSaveMapping}
-          disabled={!selectedGesture || !selectedControl}
-        >
-          Confirmar
-        </button>
+        
+      <div className="contenedor-botones">
+        <button class = "Reiniciar" onClick={handleResetMappings}> REINICIAR </button>
+        <button class = "Confirmar" onClick={handleSaveMapping} disabled={!selectedGesture || !selectedControl}> CONFIRMAR </button>
+        <button class = "Terminar" onClick={handleTerminate}> TERMINAR </button>
       </div>
 
+
+      </main>
+
       <div className="mappings">
-        <h3>Mapeos actuales:</h3>
+        <h3 class = "mapeo">  MAPEOS ACTUALES:</h3>
         <ul>
           {Array.from(mappings).map(([gesture, control]) => (
             <li key={crypto.randomUUID()} className="mapping-item">
-              {gesture} → {control}
+              <div className="gesture">{gesture}</div>
+              <div className="arrow"> ➡️ </div>
+              <div className="gesture">{control}</div>
             </li>
           ))}
         </ul>
       </div>
-    </div>
+    </> 
   );
 };
 
