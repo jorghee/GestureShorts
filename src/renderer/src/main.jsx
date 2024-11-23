@@ -11,15 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route
-          path="/mapper"
-          element={
-            <GestureControlMapper
-              getGestures={window.api.getGestures}
-              getControls={window.api.getControls}
-            />
-          }
-        />
+        <Route path="/mapper" element={<GestureControlMapper />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
