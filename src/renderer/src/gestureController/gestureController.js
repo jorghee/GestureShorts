@@ -1,4 +1,5 @@
-import { movingAverageSmoothing } from "./smoothing.js";
+import { KalmanFilter } from "kalman-filter";
+import { id } from "../../../utils/utils.js";
 
 const handleGesturePrediction = (
   handLandmarkerRef,
@@ -7,8 +8,23 @@ const handleGesturePrediction = (
   animationFrameRef
 ) => {
   let lastVideoTime = -1;
-  let smoothedLandmarks = [];
   let mapping;
+  let previousCorrectedX = null;
+  let previousCorrectedY = null;
+
+  const kalmanX = new KalmanFilter({
+    observation: 1,
+    dynamic: {
+      name: "constant-speed"
+    }
+  });
+
+  const kalmanY = new KalmanFilter({
+    observation: 1,
+    dynamic: {
+      name: "constant-speed"
+    }
+  });
 
   const predictWebcam = async () => {
     if (
@@ -30,11 +46,31 @@ const handleGesturePrediction = (
       );
 
       if (newResults.landmarks.length > 0) {
-        const smoothed = movingAverageSmoothing(
-          newResults.landmarks[0],
-          smoothedLandmarks,
-          bufferSize
-        );
+        const indexTip = newResults.landmarks[0][id.INDEX_FINGER_TIP];
+
+        const predictedX = kalmanX.predict({
+          previousCorrected: previousCorrectedX
+        });
+        const correctedX = kalmanX.correct({
+          predicted: predictedX,
+          observation: [indexTip.x]
+        });
+
+        const predictedY = kalmanY.predict({
+          previousCorrected: previousCorrectedY
+        });
+        const correctedY = kalmanY.correct({
+          predicted: predictedY,
+          observation: [indexTip.y]
+        });
+
+        previousCorrectedX = correctedX;
+        previousCorrectedY = correctedY;
+
+        const smoothed = {
+          x: correctedX.mean[0],
+          y: correctedY.mean[0]
+        };
 
         await window.api.moveMouse(newResults.handedness, smoothed);
 
