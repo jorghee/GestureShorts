@@ -27,7 +27,6 @@
     "@mui/material": "^6.1.4",
     "@nut-tree-fork/nut-js": "^4.2.2",
     "electron-updater": "^6.1.7",
-    "kalman-filter": "^2.3.0",
     "path-browserify": "^1.0.1",
     "react-router-dom": "^6.28.0"
   },
