@@ -55,14 +55,12 @@ const GestureControlMapper = () => {
   };
 
   return (
-
     <>
       <main>
-      <h1 class="tituloRelacionar">RELACIONAR GESTOS CON CONTROLES</h1>
-      <div class = "contenedor">
-
-        <div class = "gestos">
-          <h2 class = "subTitulo" >GESTOS</h2>
+        <h1 className="tituloRelacionar">RELACIONAR GESTOS CON CONTROLES</h1>
+        <div className="contenedor">
+          <div className="gestos">
+            <h2 className="subTitulo">GESTOS</h2>
             {gestureOptions.map((displayName) => (
               <button
                 key={crypto.randomUUID()}
@@ -72,44 +70,52 @@ const GestureControlMapper = () => {
                 {displayName}
               </button>
             ))}
-        </div>
-            
-        <div class = "controles">
-          <h2 class = "subTitulo" >CONTROLES</h2>
-          {controlOptions.map((displayName) => (
-            <button
-              key={crypto.randomUUID()}
-              className={`botonesGestosControles ${selectedControl === displayName ? "selected" : ""}`}
-              onClick={() => setSelectedControl(displayName)}
-            >
-              {displayName}
-            </button>
-          ))}
-        </div>
-      </div>
-        
-      <div className="contenedor-botones">
-        <button class = "Reiniciar" onClick={handleResetMappings}> REINICIAR </button>
-        <button class = "Confirmar" onClick={handleSaveMapping} disabled={!selectedGesture || !selectedControl}> CONFIRMAR </button>
-        <button class = "Terminar" onClick={handleTerminate}> TERMINAR </button>
-      </div>
+          </div>
 
+          <div className="controles">
+            <h2 className="subTitulo">CONTROLES</h2>
+            {controlOptions.map((displayName) => (
+              <button
+                key={crypto.randomUUID()}
+                className={`botonesGestosControles ${selectedControl === displayName ? "selected" : ""}`}
+                onClick={() => setSelectedControl(displayName)}
+              >
+                {displayName}
+              </button>
+            ))}
+          </div>
+        </div>
 
+        <div className="contenedor-botones">
+          <button className="Reiniciar" onClick={handleResetMappings}>
+            REINICIAR
+          </button>
+          <button
+            className="Confirmar"
+            onClick={handleSaveMapping}
+            disabled={!selectedGesture || !selectedControl}
+          >
+            CONFIRMAR
+          </button>
+          <button className="Terminar" onClick={handleTerminate}>
+            TERMINAR
+          </button>
+        </div>
       </main>
 
       <div className="mappings">
-        <h3 class = "mapeo">  MAPEOS ACTUALES:</h3>
+        <h3 className="mapeo">MAPEOS ACTUALES:</h3>
         <ul>
           {Array.from(mappings).map(([gesture, control]) => (
             <li key={crypto.randomUUID()} className="mapping-item">
               <div className="gesture">{gesture}</div>
-              <div className="arrow"> ➡️ </div>
+              <div className="arrow">➡️</div>
               <div className="gesture">{control}</div>
             </li>
           ))}
         </ul>
       </div>
-    </> 
+    </>
   );
 };
 

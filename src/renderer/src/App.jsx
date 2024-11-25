@@ -44,23 +44,37 @@ const App = () => {
   };
 
   return (
-    <>  
+    <>
       <header>
-        
-    </header>
+      </header>
 
-    <main>
-      <hr />
-      <h1 class="titulo">GESTURE SHORTS</h1>
-      <video autoPlay={true} width={200} height = {100} id="video" ></video>
-      <Button class = "btnComenzar "id="start" onClick={startDetection}> COMENZAR </Button>
-      <Button class = "btnConfiguracion" onClick={() => navigate("/mapper")}> CONFIGURAR GESTOS</Button>
-      <hr />
-    </main>
+      <main>
+        <hr />
+        <h1 class="titulo">GESTURE SHORTS</h1>
+        <video 
+          autoPlay={true} 
+          width={200} 
+          height={100} 
+          id="video"
+        ></video>
+        <Button 
+          class="btnComenzar" 
+          id="start" 
+          onClick={startDetection}
+        >
+          COMENZAR
+        </Button>
+        <Button 
+          class="btnConfiguracion" 
+          onClick={() => navigate("/mapper")}
+        >
+          CONFIGURAR GESTOS
+        </Button>
+        <hr />
+      </main>
 
-    <footer>
-    </footer>
-
+      <footer>
+      </footer>
     </>
   );
 };
