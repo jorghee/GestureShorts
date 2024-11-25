@@ -1,19 +1,16 @@
 import { useCallback, useRef } from "react";
 import Button from "@mui/material/Button";
-import PlayArrow from "@mui/icons-material/PlayArrow";
 
 import useWebcam from "./hooks/useWebcam.js";
 import useHandLandmarker from "./hooks/useHandLandmarker.js";
 import configuration from "../../utils/config.js";
 import handleGesturePrediction from "./gestureController/gestureController.js";
-
 import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
   const handLandmarkerRef = useHandLandmarker();
   const animationFrameRef = useRef(null); // Track the animation
-
   const navigate = useNavigate();
 
   const predictWebcam = useCallback(() => {
@@ -49,13 +46,13 @@ const App = () => {
 
       <main>
         <hr />
-        <h1 class="titulo">GESTURE SHORTS</h1>
+        <h1 className="titulo">GESTURE SHORTS</h1>
         <video autoPlay={true} width={200} height={100} id="video"></video>
-        <Button class="btnComenzar" id="start" onClick={startDetection}>
+        <Button className="btnComenzar" id="start" onClick={startDetection}>
           COMENZAR
         </Button>
         <Button
-          class="btnConfiguracion"
+          className="btnConfiguracion"
           onClick={() => navigate("/mapper")}
         >
           CONFIGURAR GESTOS
