@@ -39,13 +39,11 @@ const handleGesturePrediction = (
         await window.api.moveMouse(newResults.handedness, smoothed);
 
         if (newResults.landmarks.length > 1) {
-          await Promise.all([
-            window.api.performLeftClick("isPinch", newResults.landmarks[1]),
-            window.api.performScreenCapture("isFist", newResults.landmarks[1]),
-            window.api.performRightClick("isRightPinch", newResults.landmarks[1]),
-            window.api.performScrollUp("isWristExtensionBackward", newResults.landmarks[1]),
-            window.api.performScrollDown("isWristFlexionForward", newResults.landmarks[1])
-          ]);
+          await Promise.all(
+            Array.from(mapping.entries()).map(async ([gesture, control]) => {
+              await window.api[control](gesture, newResults.landmarks[1]);
+            })
+          );
         }
       }
     }
