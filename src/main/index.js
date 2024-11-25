@@ -79,12 +79,18 @@ app.whenReady().then(() => {
     await moveMouse(handedness, smoothed);
   });
 
-  for (const [controlStr, controlFunction] of ac.entries()) {
-    ipcMain.handle(controlStr, async (event, gestureStr, landmarks) => {
-      const gestureFunction = ag.get(gestureStr);
-      await controlFunction(gestureFunction, landmarks);
-    });
-  }
+  ipcMain.handle("performRightClick", async (event, gestureStr, landmarks) => {
+    await ac.performRightClick(gestureStr, landmarks);
+  });
+
+  ipcMain.handle("performScrollDown", async (event, gestureStr, landmarks) => {
+    await ac.performScrollDown(gestureStr, landmarks);
+  });
+
+  ipcMain.handle("performScrollUp", async (event, gestureStr, landmarks) => {
+    await ac.performScrollUp(gestureStr, landmarks);
+  });
+
 });
 
 app.on("activate", function () {

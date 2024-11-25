@@ -1,10 +1,12 @@
 import { isLeftPinch } from "./isLeftPinch.js";
-import { isRightPinch } from "./isRightPinch.js";
-import { isFist } from "./isFist.js";
+import { isRightPinch } from "./isRightPinch.js"; 
+import { isWristExtensionBackward } from "./isWristExtensionBackward.js";
+import { isWristFlexionForward } from "./isWristFlexionForward.js";
 
-const ag = new Map();
-ag.set("Pinch con indice", isLeftPinch);
-ag.set("Pinch con medio", isRightPinch);
-ag.set("Puño", isFist);
-
-export default ag;
+export const ag = new Map([
+    ["isPinch", isPinch], 
+    ["isFist", isFist],
+    ["isRightPinch", isRightPinch],
+    ["isWristExtensionBackward", isWristExtensionBackward],
+    ["isWristFlexionForward", isWristFlexionForward]
+]);
