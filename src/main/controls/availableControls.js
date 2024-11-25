@@ -1,13 +1,10 @@
 import performLeftClick from "./performLeftClick.js";
 import performScreenCapture from "./performScreenCapture.js";
 import performRightClick from "./performRightClick.js";
-import performScrollDown from "./performScrollDown.js";
-import performScrollUp from "./performScrollUp.js";
 
-export const ac = {
-  performLeftClick,
-  performScreenCapture,
-  performRightClick,
-  performScrollUp,
-  performScrollDown
-};
+const ac = new Map();
+ac.set("Clic izquierdo", performLeftClick);
+ac.set("Clic derecho", performRightClick);
+ac.set("Captura de pantalla", performScreenCapture);
+
+export default ac;

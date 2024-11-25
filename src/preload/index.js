@@ -8,21 +8,10 @@ const api = {
   moveMouse: (handedness, smoothed) =>
     ipcRenderer.invoke("moveMouse", handedness, smoothed),
 
-  performLeftClick: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performLeftClick", gestureStr, landmark),
-
-  performScreenCapture: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performScreenCapture", gestureStr, landmark),
-
-  performRightClick: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performRightClick", gestureStr, landmark),
-
-  performScrollUp: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performScrollUp", gestureStr, landmark),
-
-  performScrollDown: (gestureStr, landmark) =>
-    ipcRenderer.invoke("performScrollDown", gestureStr, landmark)
-
+  getGestures: () => [...ag.keys()],
+  getControls: () => [...ac.keys()],
+  loadMappings: () => ipcRenderer.invoke("loadMappings"),
+  saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings)
 };
 
 for (const [controlStr] of ac.entries()) {
