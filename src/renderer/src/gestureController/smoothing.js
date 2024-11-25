@@ -1,11 +1,6 @@
-const exponentialSmoothing = (
-  newLandmarks,
-  smoothedLandmarks,
-  setSmoothedLandmarks,
-  alpha
-) => {
+const exponentialSmoothing = (newLandmarks, smoothedLandmarks, alpha) => {
   if (smoothedLandmarks.length === 0) {
-    setSmoothedLandmarks(newLandmarks);
+    smoothedLandmarks = newLandmarks;
     return newLandmarks;
   }
 
@@ -19,21 +14,20 @@ const exponentialSmoothing = (
     };
   });
 
-  setSmoothedLandmarks(smoothed);
+  smoothedLandmarks = smoothed;
   return smoothed;
 };
 
 const movingAverageSmoothing = (
   newLandmarks,
   smoothedLandmarks,
-  setSmoothedLandmarks,
   bufferSize
 ) => {
   const updatedBuffer = [...smoothedLandmarks, newLandmarks];
   if (updatedBuffer.length > bufferSize) {
     updatedBuffer.shift(); // Remove the oldest set of landmarks
   }
-  setSmoothedLandmarks(updatedBuffer);
+  smoothedLandmarks = updatedBuffer;
 
   // Compute the average of the coordinates in the buffer
   const smoothed = newLandmarks.map((_, index) => {

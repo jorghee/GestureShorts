@@ -1,34 +1,29 @@
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import Button from "@mui/material/Button";
 import PlayArrow from "@mui/icons-material/PlayArrow";
 
-import Sidebar from "./components/Sidebar.jsx";
-import { configuration } from "../../utils/config.js";
-
 import useWebcam from "./hooks/useWebcam.js";
 import useHandLandmarker from "./hooks/useHandLandmarker.js";
+import configuration from "../../utils/config.js";
 import handleGesturePrediction from "./gestureController/gestureController.js";
+
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
-  const [lastVideoTime, setLastVideoTime] = useState(-1);
-  const [config, setConfig] = useState(configuration);
-  const [smoothedLandmarks, setSmoothedLandmarks] = useState([]);
   const handLandmarkerRef = useHandLandmarker();
-  const animationFrame = useRef(null); // Track the animation
+  const animationFrameRef = useRef(null); // Track the animation
+
+  const navigate = useNavigate();
 
   const predictWebcam = useCallback(() => {
     handleGesturePrediction(
-      handLandmarkerRef.current,
-      videoRef.current,
-      config.bufferSize,
-      smoothedLandmarks,
-      setSmoothedLandmarks,
-      animationFrame.current,
-      lastVideoTime,
-      setLastVideoTime
+      handLandmarkerRef,
+      videoRef,
+      configuration.bufferSize,
+      animationFrameRef
     );
-  }, [handLandmarkerRef, videoRef, smoothedLandmarks, config]);
+  }, [handLandmarkerRef, videoRef]);
 
   const startDetection = () => {
     if (!handLandmarkerRef.current) {
@@ -36,19 +31,16 @@ const App = () => {
       return;
     }
 
-    setWebcamRunning((prevRunning) => {
-      const newRunning = !prevRunning;
-      const startButton = document.getElementById("start");
-      startButton.innerText = newRunning ? "Stop" : "Start";
+    if (isWebcamRunning) {
+      predictWebcam();
+    } else if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
 
-      if (newRunning) {
-        predictWebcam();
-      } else {
-        cancelAnimationFrame(animationFrame.current);
-      }
+    const startButton = document.getElementById("start");
+    startButton.innerText = isWebcamRunning ? "CANCELAR" : "COMENZAR";
 
-      return newRunning;
-    });
+    setWebcamRunning(!isWebcamRunning);
   };
 
   return (
@@ -56,25 +48,17 @@ const App = () => {
       <header>
         <p>Gesture Shorts</p>
       </header>
-      <div id="content">
-        <Sidebar config={config} setConf={setConfig} />
-        <div id="camera">
-          <video
-            autoPlay={true}
-            width={800}
-            height={400}
-            id="video"
-            style={{ transform: "scaleX(-1)" }}
-          ></video>
-          <Button
-            id="start"
-            variant="contained"
-            startIcon={<PlayArrow />}
-            onClick={startDetection}
-          >
-            Start
-          </Button>
-        </div>
+      <div id="home">
+        <video autoPlay={true} width={400} height={200} id="video"></video>
+        <Button
+          id="start"
+          variant="contained"
+          startIcon={<PlayArrow />}
+          onClick={startDetection}
+        >
+          COMENZAR
+        </Button>
+        <Button onClick={() => navigate("/mapper")}>Configurar Gestos</Button>
       </div>
     </>
   );

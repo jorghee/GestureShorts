@@ -3,8 +3,11 @@ import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 
-import { ac } from "./controls/availableControls.js";
+import ac from "./controls/availableControls.js";
+import ag from "./gestures/availableGestures.js";
 import { moveMouse } from "./controls/mouseTracking.js";
+
+import { saveMappings, loadMappings } from "./mappingHandler/mappingHandler.js";
 
 function createWindow() {
   // Create the browser window.
@@ -55,16 +58,25 @@ app.whenReady().then(() => {
 
   createWindow();
 
+  ipcMain.handle("loadMappings", async () => {
+    try {
+      return await loadMappings(ag, ac);
+    } catch (error) {
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle("saveMappings", async (event, newMappings) => {
+    try {
+      await saveMappings(newMappings);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  });
+
   ipcMain.handle("moveMouse", async (event, handedness, smoothed) => {
     await moveMouse(handedness, smoothed);
-  });
-
-  ipcMain.handle("performLeftClick", async (event, gestureStr, landmarks) => {
-    await ac.performLeftClick(gestureStr, landmarks);
-  });
-
-  ipcMain.handle("performScreenCapture", async (event, gestureStr, landmarks) => {
-    await ac.performScreenCapture(gestureStr, landmarks);
   });
 
   ipcMain.handle("performRightClick", async (event, gestureStr, landmarks) => {
@@ -81,11 +93,11 @@ app.whenReady().then(() => {
 
 });
 
-  app.on("activate", function () {
-    // On macOS it"s common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+app.on("activate", function () {
+  // On macOS it"s common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it"s common
 // for applications and their menu bar to stay active until the user quits
