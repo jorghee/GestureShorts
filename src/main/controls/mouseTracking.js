@@ -1,5 +1,4 @@
 import { mouse, Point, straightTo, screen } from "@nut-tree-fork/nut-js";
-import { id } from "../../utils/utils.js";
 
 async function convertLandmarksToScreenCoords(landmark) {
   const width = await screen.width();
@@ -12,10 +11,8 @@ async function convertLandmarksToScreenCoords(landmark) {
   return screenCoords;
 }
 
-async function moveMouse(handedness, landmarks) {
-  const screenCoords = await convertLandmarksToScreenCoords(
-    landmarks[id.INDEX_FINGER_TIP]
-  );
+async function moveMouse(handedness, landmark) {
+  const screenCoords = await convertLandmarksToScreenCoords(landmark);
   await mouse.move(straightTo(screenCoords));
 }
 
