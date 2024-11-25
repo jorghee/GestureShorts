@@ -1,107 +1,91 @@
-.tituloRelacionar{
-  color: #fefefe;
-  font-size: 30px;
-  padding: 10px;
-  width: 100%;
-  text-align: center;
+.gesture-control-mapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #3366cc;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.subTitulo {
-  color: #fefefe;
-  font-size: 20px;
-  width: 100%;
-  text-align: center;
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.mapeo {
-  color: #fefefe;
-  font-size: 20px;
-  width: 100%;
-  text-align: center;
-}
-
-.contenedor {
+.options-container {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.gestos, .controles {
+.gestures, .controls {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.botonesGestosControles {
-  width: 400px;
-  padding: 20px;
-  margin: 10px 0;
-  font-size: 16px;
-  color: #000000;
-  background-color: #DDD5A9;
-  border-radius: 10px;
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
-.botonesGestosControles.selected {
-  background-color: #D9C764;
-}
-
-.contenedor-botones {
-  display: flex;                  
-  justify-content: space-between; 
-  align-items: center;           
-  width: 100%;                  
-}
-
-.Reiniciar, .Terminar {
+.option-button {
   width: 200px;
   padding: 10px;
-  margin: 10px 0;
+  margin: 5px 0;
   font-size: 16px;
-  color: #000000;
-  background-color: #99a9f1;
-  margin-left: 30px;
-  margin-right:30px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f0e68c;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.Confirmar {
-  width: 200px;
-  padding: 15px;
-  margin: 10px 0;
-  font-size: 16px;
-  color: #ffffff;
-  background-color: #9C5A5A;
+.option-button.selected {
+  background-color: #ffcc00;
 }
 
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.button {
+  width: 100px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.terminate {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.reset {
+  background-color: #cc66cc;
+  color: #fff;
+}
+
+.confirm {
+  background-color: #66cc66;
+  color: #fff;
+}
 
 .mappings {
-  background-color: #0B2545;
-  padding: 20px;
-}
-
-.mappings ul {
-  padding: 0;
+  text-align: center;
 }
 
 .mapping-item {
-  background-color: #99a9f1;
-  border: 1px solid;
-  border-radius: 5px;
-  padding: 10px;
+  font-size: 16px;
   margin: 5px 0;
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-}
-
-.gesture, .control {
-  flex: 1; 
-  text-align: center; 
-  color: #000000;
-}
-
-.arrow {
-  margin: 0 10px; 
-  font-size: 1.5em; 
 }
