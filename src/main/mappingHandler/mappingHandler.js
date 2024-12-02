@@ -16,8 +16,7 @@ const ensureDirectoryExists = () => {
 const saveMappings = (mappings) => {
   try {
     ensureDirectoryExists();
-    const jsonObject = Object.fromEntries(mappings);
-    fs.writeFileSync(mappingsPath, JSON.stringify(jsonObject, null, 2), "utf8");
+    fs.writeFileSync(mappingsPath, JSON.stringify(mappings, null, 2), "utf8");
     console.log("Stored successfully in:", mappingsPath);
   } catch (error) {
     console.log("Error saving  mappings", error);
@@ -30,7 +29,7 @@ const loadMappings = (ag, ac) => {
     if (fs.existsSync(mappingsPath)) {
       const rawData = fs.readFileSync(mappingsPath, "utf8");
       const jsonObject = JSON.parse(rawData);
-      return new Map(Object.entries(jsonObject));
+      return jsonObject;
     } else {
       console.log("JSON file not found. Generating default mappings...");
       return generateDefaultMappings(ag, ac);
@@ -42,12 +41,15 @@ const loadMappings = (ag, ac) => {
 };
 
 const generateDefaultMappings = (ag, ac) => {
-  const defaultMappings = new Map();
+  const defaultMappings = [];
   const gestureKeys = Array.from(ag.keys());
   const controlKeys = Array.from(ac.keys());
 
   for (let i = 0; i < Math.min(gestureKeys.length, controlKeys.length); i++) {
-    defaultMappings.set(gestureKeys[i], controlKeys[i]);
+    defaultMappings.push({
+      gesture: gestureKeys[i],
+      control: controlKeys[i]
+    });
   }
 
   return defaultMappings;

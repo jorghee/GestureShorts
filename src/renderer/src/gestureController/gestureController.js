@@ -76,7 +76,7 @@ const handleGesturePrediction = (
 
         if (newResults.landmarks.length > 1) {
           await Promise.all(
-            Array.from(mapping.entries()).map(async ([gesture, control]) => {
+            mapping.map(async ({ gesture, control }) => {
               await window.api[control](gesture, newResults.landmarks[1]);
             })
           );
