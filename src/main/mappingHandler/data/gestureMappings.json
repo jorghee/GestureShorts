@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "gesture": "Pinch con indice",
+    "control": "Clic derecho"
+  },
+  {
+    "gesture": "Extención de muñeca para atrás",
+    "control": "Captura de pantalla"
+  },
+  {
+    "gesture": "Flexión de muñeca para adelante",
+    "control": "Scroll Down"
+  }
+]
