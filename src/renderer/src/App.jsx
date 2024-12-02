@@ -1,66 +1,47 @@
-import { useCallback, useRef } from "react";
-import Button from "@mui/material/Button";
-
-import useWebcam from "./hooks/useWebcam.js";
-import useHandLandmarker from "./hooks/useHandLandmarker.js";
-import configuration from "../../utils/config.js";
-import handleGesturePrediction from "./gestureController/gestureController.js";
 import { useNavigate } from "react-router-dom";
 
 const App = () => {
-  const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
-  const handLandmarkerRef = useHandLandmarker();
-  const animationFrameRef = useRef(null); // Track the animation
   const navigate = useNavigate();
-
-  const predictWebcam = useCallback(() => {
-    handleGesturePrediction(
-      handLandmarkerRef,
-      videoRef,
-      configuration.bufferSize,
-      animationFrameRef
-    );
-  }, [handLandmarkerRef, videoRef]);
-
-  const startDetection = () => {
-    if (!handLandmarkerRef.current) {
-      console.log("Wait! handLandmarker not loaded yet.");
-      return;
-    }
-
-    if (isWebcamRunning) {
-      predictWebcam();
-    } else if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-
-    const startButton = document.getElementById("start");
-    startButton.innerText = isWebcamRunning ? "CANCELAR" : "COMENZAR";
-
-    setWebcamRunning(!isWebcamRunning);
-  };
+  let link = "";
 
   return (
     <>
-      <header></header>
+      <div className="container">
+        <h1 className="title">GESTURE SHORTS</h1>
 
-      <main>
-        <hr />
-        <h1 className="titulo">GESTURE SHORTS</h1>
-        <video autoPlay={true} width={200} height={100} id="video"></video>
-        <Button className="btnComenzar" id="start" onClick={startDetection}>
-          COMENZAR
-        </Button>
-        <Button
-          className="btnConfiguracion"
-          onClick={() => navigate("/mapper")}
-        >
-          CONFIGURAR GESTOS
-        </Button>
-        <hr />
-      </main>
+        <div className="radio-tile-group">
+          <div className="input-container">
+            <input
+              id="hand"
+              type="radio"
+              name="radio"
+              onChange={() => (link = "/rehabilitation")}
+            />
+            <div className="radio-tile">
+              <ion-icon name="thumbs-up-outline"></ion-icon>
+              <label htmlFor="hand">Modo Rehabilitación</label>
+            </div>
+          </div>
 
-      <footer></footer>
+          <div className="input-container">
+            <input
+              id="custom"
+              type="radio"
+              name="radio"
+              onChange={() => (link = "/customization")}
+            />
+            <div className="radio-tile">
+              <ion-icon name="trending-up-outline"></ion-icon>
+              <label htmlFor="custom">Modo Personalizable</label>
+            </div>
+          </div>
+        </div>
+
+        <div className="buttons-container">
+          <button onClick={() => window.close()}>Salir</button>
+          <button onClick={() => navigate(link)}>Continuar</button>
+        </div>
+      </div>
     </>
   );
 };
