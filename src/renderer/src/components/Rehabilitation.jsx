@@ -9,6 +9,8 @@ const Rehabilitation = () => {
   const selectedControl = useRef("");
   const [mappings, setMappings] = useState([]);
 
+  console.log("Render Rehabilitation");
+
   useEffect(() => {
     const loadDefaultMappings = async () => {
       const defaultMappings = await window.api.loadMappings();
@@ -61,57 +63,67 @@ const Rehabilitation = () => {
     }
   };
 
+  const ensureMapping = () => {
+    mappings.map(({ gesture, control }) => {
+      gestureOptions.current = gestureOptions.current.filter(
+        (item) => item !== gesture
+      );
+      controlOptions.current = controlOptions.current.filter(
+        (item) => item !== control
+      );
+    });
+  };
+
+  ensureMapping();
+
   return (
     <>
       <h1 className="title title-fixed">RELACIONAR</h1>
       <div className="container-flex">
-        {gestureOptions.current.length > 0 &&
-          controlOptions.current.length > 0 && (
-            <div className="radio-tile-group">
-              <div className="container-block">
-                <h2 className="heading">GESTOS</h2>
-                {gestureOptions.current.map((gesture) => (
-                  <div
-                    className="input-container input-container--small"
-                    key={crypto.randomUUID()}
-                  >
-                    <input
-                      id={`gesture-${gesture}`}
-                      type="radio"
-                      name="gestures"
-                      onChange={() => (selectedGesture.current = gesture)}
-                    />
-                    <div className="radio-tile radio-tile--highlighted">
-                      <label htmlFor={`gesture-${gesture}`}>{gesture}</label>
-                    </div>
-                  </div>
-                ))}
+        <div className="radio-tile-group">
+          <div className="container-block">
+            <h2 className="heading">GESTOS</h2>
+            {gestureOptions.current.map((gesture) => (
+              <div
+                className="input-container input-container--small"
+                key={crypto.randomUUID()}
+              >
+                <input
+                  id={`gesture-${gesture}`}
+                  type="radio"
+                  name="gestures"
+                  onChange={() => (selectedGesture.current = gesture)}
+                />
+                <div className="radio-tile radio-tile--highlighted">
+                  <label htmlFor={`gesture-${gesture}`}>{gesture}</label>
+                </div>
               </div>
+            ))}
+          </div>
 
-              <div className="container-block">
-                <h2 className="heading">CONTROLES</h2>
-                {controlOptions.current.map((control) => (
-                  <div
-                    className="input-container input-container--small"
-                    key={crypto.randomUUID()}
-                  >
-                    <input
-                      id={`control-${control}`}
-                      type="radio"
-                      name="controls"
-                      onChange={() => {
-                        selectedControl.current = control;
-                        handleSaveMapping();
-                      }}
-                    />
-                    <div className="radio-tile radio-tile--highlighted">
-                      <label htmlFor={`control-${control}`}>{control}</label>
-                    </div>
-                  </div>
-                ))}
+          <div className="container-block">
+            <h2 className="heading">CONTROLES</h2>
+            {controlOptions.current.map((control) => (
+              <div
+                className="input-container input-container--small"
+                key={crypto.randomUUID()}
+              >
+                <input
+                  id={`control-${control}`}
+                  type="radio"
+                  name="controls"
+                  onChange={() => {
+                    selectedControl.current = control;
+                    handleSaveMapping();
+                  }}
+                />
+                <div className="radio-tile radio-tile--highlighted">
+                  <label htmlFor={`control-${control}`}>{control}</label>
+                </div>
               </div>
-            </div>
-          )}
+            ))}
+          </div>
+        </div>
 
         <div className="container-scrool">
           <div className="buttons-container">

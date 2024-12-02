@@ -1,11 +1,19 @@
 [
   {
     "gesture": "Pinch con indice",
+    "control": "Clic izquierdo"
+  },
+  {
+    "gesture": "Pinch con medio",
     "control": "Clic derecho"
   },
   {
-    "gesture": "Extención de muñeca para atrás",
+    "gesture": "Puño",
     "control": "Captura de pantalla"
+  },
+  {
+    "gesture": "Extención de muñeca para atrás",
+    "control": "Scroll Up"
   },
   {
     "gesture": "Flexión de muñeca para adelante",
