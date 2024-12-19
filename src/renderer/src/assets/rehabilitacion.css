@@ -43,7 +43,6 @@
     margin-top: 2rem;
 }
 
-
 p {
     color: #FFFFFF;
     font-size: 14px;
@@ -66,4 +65,16 @@ p {
     width: 40px; 
     height: auto;
     filter: invert(100%);
+}
+
+.Comenzar {
+    background-color: #8E7767;
+    font-family: "Bebas Neue";
+    color: #FFFFFF;
+    font-size: 30px;
+    height: 3rem;
+    width: 24rem; 
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
