@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+:root {
+  --primary-color: #101616;
+  --secondary-color: #81CCB8;
+  --tertiary-color-1: #B17D4C;
+  --tertiary-color-2: #FFFFFF;
+}
+
+body {
+  background-color: var(--primary-color);
+  font-family: "Mulish", serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.gesture-container {
+  text-align: center;
+}
+
+.gesture-title {
+  color: var(--secondary-color);
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: "Bebas Neue";
+}
+
+.gesture-mode-selector {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gesture-option img {
+  max-width: 80%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 8px; 
+}
+
+.gesture-option-container {
+  position: relative;
+  height: 20rem;
+  width: 20rem;
+  margin: 1rem;
+  font-family: "Bebas Neue";
+}
+
+.gesture-option-container input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+}
+
+.gesture-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 3px solid var(--secondary-color);
+  border-radius: 1rem;
+  transition: all 300ms ease;
+}
+
+.gesture-option-container ion-icon {
+  color: var(--secondary-color);
+  font-size: 10rem;
+}
+
+.gesture-option-container label {
+  color: var(--secondary-color);
+  font-size: 30px;
+  text-transform: uppercase;
+  margin-top: 1rem;
+}
+
+input:checked + .gesture-option {
+  background-color: var(--secondary-color);
+  transform: scale(1.05);
+}
+
+input:hover + .gesture-option {
+  box-shadow: 0 0 12px var(--secondary-color);
+}
+
+input:checked + .gesture-option ion-icon,
+input:checked + .gesture-option label {
+  color: var(--primary-color);
+}
+
+.gesture-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rem;
+  margin-top: 2rem;
+}
+
+.Continuar {
+  background-color: #8E7767;
+  font-family: "Bebas Neue";
+  color: #FFFFFF;
+  font-size: 30px;
+  height: 3rem;
+  width: 24rem; 
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}

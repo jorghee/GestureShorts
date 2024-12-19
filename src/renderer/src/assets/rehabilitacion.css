@@ -1,0 +1,69 @@
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.left-content,
+.right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box; 
+}
+
+
+.titulo {
+    color: #ffffff;
+    font-size: 40px;
+    font-family: "Bebas Neue";
+    padding: 10px;
+    width: 450px;
+    text-align: center;
+}
+
+#video {
+    width: 80%;
+    height: auto;
+    display: block;
+    transform: scaleX(-1);
+    padding: 20px;
+}
+
+.gesture-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10rem;
+    margin-top: 2rem;
+}
+
+
+p {
+    color: #FFFFFF;
+    font-size: 14px;
+    text-align: center;
+    width: 450px;
+    font-family: "Mulish";
+}
+
+.back-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    font-size: 24px;
+    cursor: pointer;
+    color: #FFFFFF; 
+    z-index: 1000; 
+}
+
+.retroceder-icon{
+    width: 40px; 
+    height: auto;
+    filter: invert(100%);
+}

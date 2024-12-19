@@ -1,0 +1,47 @@
+.mapeo {
+    color: #fefefe;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+
+.mappings ul {
+    padding: 0;
+}
+
+.mapping-item {
+    background-color: #81CCB8;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    font-family: "Mulish";
+}
+
+.gesture, .control {
+    flex: 1; 
+    text-align: center; 
+    color: #000000;
+}
+
+.arrow {
+    margin: 0 10px; 
+    font-size: 1.5em; 
+}
+
+.tituloMapping {
+    color: #ffffff;
+    font-size: 25px;
+    font-family: "Bebas Neue";
+    padding: 10px;
+    text-align: center;
+}
+
+.flecha-icon {
+    width: 25px; 
+    height: auto; 
+}

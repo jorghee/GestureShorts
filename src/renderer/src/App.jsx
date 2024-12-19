@@ -1,66 +1,51 @@
-import { useCallback, useRef } from "react";
-import Button from "@mui/material/Button";
-
-import useWebcam from "./hooks/useWebcam.js";
-import useHandLandmarker from "./hooks/useHandLandmarker.js";
-import configuration from "../../utils/config.js";
-import handleGesturePrediction from "./gestureController/gestureController.js";
 import { useNavigate } from "react-router-dom";
+import "./assets/App.css"
+import rehabilitacionIcon from "../src/assets/images/massage_color.png";
+import personalizacionIcon from "../src/assets/images/personalized.png";
 
 const App = () => {
-  const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
-  const handLandmarkerRef = useHandLandmarker();
-  const animationFrameRef = useRef(null); // Track the animation
   const navigate = useNavigate();
-
-  const predictWebcam = useCallback(() => {
-    handleGesturePrediction(
-      handLandmarkerRef,
-      videoRef,
-      configuration.bufferSize,
-      animationFrameRef
-    );
-  }, [handLandmarkerRef, videoRef]);
-
-  const startDetection = () => {
-    if (!handLandmarkerRef.current) {
-      console.log("Wait! handLandmarker not loaded yet.");
-      return;
-    }
-
-    if (isWebcamRunning) {
-      predictWebcam();
-    } else if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current);
-    }
-
-    const startButton = document.getElementById("start");
-    startButton.innerText = isWebcamRunning ? "CANCELAR" : "COMENZAR";
-
-    setWebcamRunning(!isWebcamRunning);
-  };
+  let link = "";
 
   return (
     <>
-      <header></header>
+      <div className="gesture-container">
+        <h1 className="gesture-title">GESTURE SHORTS</h1>
 
-      <main>
-        <hr />
-        <h1 className="titulo">GESTURE SHORTS</h1>
-        <video autoPlay={true} width={200} height={100} id="video"></video>
-        <Button className="btnComenzar" id="start" onClick={startDetection}>
-          COMENZAR
-        </Button>
-        <Button
-          className="btnConfiguracion"
-          onClick={() => navigate("/mapper")}
-        >
-          CONFIGURAR GESTOS
-        </Button>
-        <hr />
-      </main>
+        <div className="gesture-mode-selector">
+          <div className="gesture-option-container">
+            <input
+              id="rehabilitation-mode"
+              type="radio"
+              name="mode-selection"
+              onChange={() => (link = "/Rehabilitacion")}
+            />
+            <div className="gesture-option">
+              <ion-icon name="thumbs-up-outline"></ion-icon>
+              <label htmlFor="rehabilitation-mode">Modo Rehabilitación</label>
+              <img src={rehabilitacionIcon}/>
+            </div>
+          </div>
 
-      <footer></footer>
+          <div className="gesture-option-container">
+            <input
+              id="custom-mode"
+              type="radio"
+              name="mode-selection"
+              onChange={() => (link = "/Personalizado")}
+            />
+            <div className="gesture-option">
+              <ion-icon name="trending-up-outline"></ion-icon>
+              <label htmlFor="custom-mode">Modo Personalizable</label>
+              <img src={personalizacionIcon}/>
+            </div>
+          </div>
+        </div>
+
+        <div className="gesture-buttons-container">
+          <button className= "Continuar" onClick={() => navigate(link)}>Continuar</button>
+        </div>
+      </div>
     </>
   );
 };
