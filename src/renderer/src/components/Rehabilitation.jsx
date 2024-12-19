@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faHome } from "@fortawesome/free-solid-svg-icons";
+
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,6 +65,13 @@ const Rehabilitation = () => {
       console.log("Error saving mappings:", result.error);
     }
   };
+//Nueva funcion agregada
+  const handleDeleteMapping = (index) => {
+    const mappingToRemove = mappings[index];
+    gestureOptions.current = [...gestureOptions.current, mappingToRemove.gesture];
+    controlOptions.current = [...controlOptions.current, mappingToRemove.control];
+    setMappings((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const ensureMapping = () => {
     mappings.map(({ gesture, control }) => {
@@ -78,7 +88,11 @@ const Rehabilitation = () => {
 
   return (
     <>
+    <button className="home-button"  onClick={() => navigate("/")}>
+      <FontAwesomeIcon icon={faHome} style={{ color: "black", fontSize: "24px" }} />
+    </button>
       <h1 className="title title-fixed">RELACIONAR</h1>
+      
       <div className="container-flex">
         <div className="radio-tile-group">
           <div className="container-block">
@@ -137,13 +151,17 @@ const Rehabilitation = () => {
             <button onClick={handleTerminate}>CONFIRMAR</button>
           </div>
           <h2 className="heading">MAPEOS ACTUALES</h2>
-          {mappings.map(({ gesture, control }) => (
+          {mappings.map(({ gesture, control }, index) => (
             <div key={crypto.randomUUID()} className="mapping-item">
               <label>{gesture}</label>
               <ion-icon name="chevron-forward-outline"></ion-icon>
               <label>{control}</label>
+              <button className="delete-button" onClick={() => handleDeleteMapping(index)}>
+                <FontAwesomeIcon icon={faTrashAlt} className="icon-trash" />
+              </button>
             </div>
           ))}
+
         </div>
       </div>
     </>

@@ -82,7 +82,7 @@ input:checked + .radio-tile {
   transform: scale(1.05);
 }
 
-input:hover + .radio-tile {
+input:hover + .radio-tile + .home-button {
   box-shadow: 0 0 12px var(--secondary-color);
 }
 
@@ -115,4 +115,44 @@ button {
 
 button:active {
   box-shadow: 0 0 12px var(--tertiary-color-1);
+}
+.mapping-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.mapping-item label {
+  flex: 1;
+  text-align: center;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 60px;
+}
+
+.icon-trash {
+  color: rgb(4, 4, 8);
+  font-size: 20px;
+}
+.icon-trash:hover{
+  box-shadow: 0 0 20px rgb(214, 214, 231);
+  color: #b91010;
+  border-color: #101616;
+  border-width: 10px;
+}
+.home-button {
+  position: "absolute";
+  margin-top: "10px";
+  left: "10px";
+  border: "none";
+  cursor: "pointer";
+  margin-top: 120px;
 }
