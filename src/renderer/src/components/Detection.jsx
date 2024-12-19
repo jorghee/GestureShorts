@@ -1,5 +1,8 @@
 import { useCallback, useRef } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faHome } from "@fortawesome/free-solid-svg-icons";
+
 import useWebcam from "../hooks/useWebcam";
 import useHandLandmarker from "../hooks/useHandLandmarker";
 import configuration from "../../../utils/config";
@@ -41,15 +44,20 @@ const Detection = () => {
 
   return (
     <>
+      <button className="home-button"  onClick={() => navigate("/")}>
+              <FontAwesomeIcon icon={faHome} className="icon-home" />
+            </button>
       <div className="container">
+        
         <h1 className="title">MODO REHABILITACIÓN</h1>
         <video autoPlay={true} width={600} height={300} id="video"></video>
         <div className="buttons-container">
-          <button onClick={() => navigate("/")}>CAMBIAR MODO</button>
           <button onClick={() => navigate("/rehabilitation")}>VOLVER</button>
           <button id="start" onClick={startDetection}>
             COMENZAR
           </button>
+          <button onClick={() => navigate("/")}>CAMBIAR MODO</button>
+          
         </div>
       </div>
     </>

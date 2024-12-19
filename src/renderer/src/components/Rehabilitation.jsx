@@ -89,7 +89,7 @@ const Rehabilitation = () => {
   return (
     <>
     <button className="home-button"  onClick={() => navigate("/")}>
-      <FontAwesomeIcon icon={faHome} style={{ color: "black", fontSize: "24px" }} />
+      <FontAwesomeIcon icon={faHome} className="icon-home" />
     </button>
       <h1 className="title title-fixed">RELACIONAR</h1>
       
@@ -148,7 +148,7 @@ const Rehabilitation = () => {
             >
               DESHACER
             </button>
-            <button onClick={handleTerminate}>CONFIRMAR</button>
+            <button onClick={handleTerminate}>CONTINUAR</button>
           </div>
           <h2 className="heading">MAPEOS ACTUALES</h2>
           {mappings.map(({ gesture, control }, index) => (

@@ -85,7 +85,10 @@ input:checked + .radio-tile {
 input:hover + .radio-tile + .home-button {
   box-shadow: 0 0 12px var(--secondary-color);
 }
-
+button:hover{
+  box-shadow: 0 0 12px var(--secondary-color);
+  color: #FFFFFF;
+}
 input:checked + .radio-tile ion-icon,
 input:checked + .radio-tile label {
   color: var(--primary-color);
@@ -124,6 +127,7 @@ button:active {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-left: 20%;
 }
 
 .mapping-item label {
@@ -131,11 +135,20 @@ button:active {
   text-align: center;
 }
 
+
 .delete-button {
   background: none;
   border: none;
   cursor: pointer;
   width: 60px;
+}
+.delete-button:hover {
+  background-color: #b91010;
+  color: #FFFFFF;
+  padding: 0%;
+  margin-right: 10px;
+  width: 40px;
+
 }
 
 .icon-trash {
@@ -144,9 +157,10 @@ button:active {
 }
 .icon-trash:hover{
   box-shadow: 0 0 20px rgb(214, 214, 231);
-  color: #b91010;
+  color: #f7eeee;
   border-color: #101616;
-  border-width: 10px;
+  border-width: 20px;
+
 }
 .home-button {
   position: "absolute";
@@ -155,4 +169,12 @@ button:active {
   border: "none";
   cursor: "pointer";
   margin-top: 120px;
+}
+.icon-home:hover{
+  color: #FFFFFF;
+  font-size: 30px;
+}
+.icon-home{
+  color: "black"; 
+  font-size: "30px";
 }
