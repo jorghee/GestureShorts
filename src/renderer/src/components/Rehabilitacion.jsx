@@ -15,13 +15,15 @@ const Rehabilitacion = () => {
     const handLandmarkerRef = useHandLandmarker();
     const animationFrameRef = useRef(null); 
     const navigate = useNavigate();
+    const hugger = useRef("");
 
     const predictWebcam = useCallback(() => {
         handleGesturePrediction(
         handLandmarkerRef,
         videoRef,
         configuration.bufferSize,
-        animationFrameRef
+        animationFrameRef,
+        hugger
         );
     }, [handLandmarkerRef, videoRef]);
 

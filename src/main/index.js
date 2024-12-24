@@ -79,12 +79,19 @@ app.whenReady().then(() => {
     await moveMouse(handedness, smoothed);
   });
 
+  //Cargando todos los mapeos para manejarlos adecuadamente 
+
   for (const [controlStr, controlFunction] of ac.entries()) {
     ipcMain.handle(controlStr, async (event, gestureStr, landmarks) => {
       const gestureFunction = ag.get(gestureStr);
       await controlFunction(gestureFunction, landmarks);
     });
   }
+  ipcMain.handle("executeInVm", async (event, command)=> {
+    
+  }
+);
+
 });
 
 app.on("activate", function () {

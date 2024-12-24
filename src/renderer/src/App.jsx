@@ -41,6 +41,7 @@ const App = () => {
             </div>
           </div>
         </div>
+        
 
         <div className="gesture-buttons-container">
           <button className= "Continuar" onClick={() => navigate(link)}>Continuar</button>

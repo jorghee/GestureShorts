@@ -11,7 +11,9 @@ const api = {
   getGestures: () => [...ag.keys()],
   getControls: () => [...ac.keys()],
   loadMappings: () => ipcRenderer.invoke("loadMappings"),
-  saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings)
+  saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings),
+  //create api function to create the mappings
+  
 };
 
 for (const [controlStr] of ac.entries()) {
