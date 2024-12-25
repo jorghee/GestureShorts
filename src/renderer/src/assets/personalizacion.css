@@ -71,3 +71,21 @@
     height: auto;
     filter: invert(100%);
 }
+
+.encabezadogestos{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.botonNuevoGesto{
+    height: 40px;
+    padding: 10px 20px;
+    background-color: #8E7767;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-family: "Bebas Neue";
+    font-size: 18px;
+    width: 150px;
+}

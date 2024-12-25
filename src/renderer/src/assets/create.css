@@ -1,0 +1,166 @@
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.left-content,
+.right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box; 
+}
+
+
+.titulo {
+    color: #ffffff;
+    font-size: 40px;
+    font-family: "Bebas Neue";
+    padding: 10px;
+    width: 450px;
+    text-align: center;
+}
+
+#video {
+    width: 80%;
+    height: auto;
+    display: block;
+    transform: scaleX(-1);
+    padding: 20px;
+}
+
+.gesture-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10rem;
+    margin-top: 2rem;
+}
+
+p {
+    color: #FFFFFF;
+    font-size: 14px;
+    text-align: center;
+    width: 450px;
+    font-family: "Mulish";
+}
+
+.back-button {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    font-size: 24px;
+    cursor: pointer;
+    color: #FFFFFF; 
+    z-index: 1000; 
+}
+
+.retroceder-icon{
+    width: 40px; 
+    height: auto;
+    filter: invert(100%);
+}
+
+.Comenzar {
+    background-color: #8E7767;
+    font-family: "Bebas Neue";
+    color: #FFFFFF;
+    font-size: 30px;
+    height: 3rem;
+    width: 24rem; 
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+* Agregar estos estilos a tu archivo create.css */
+
+
+.form-container {
+    width: 100%;
+    max-width: 600px; /* Aumentado de 450px a 600px */
+    margin: 20px 0;
+}
+
+.gesture-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #FFFFFF;
+    font-family: "Mulish";
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.finger-input select {
+    padding: 8px;
+    border: 1px solid #8E7767;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-family: "Mulish";
+    font-size: 14px;
+    width: 100%;
+}
+
+/* Nuevo contenedor para límite y tipo */
+.inline-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 3rem;
+}
+
+.inline-container .form-group {
+    margin: 0;
+}
+
+/* Ajuste específico para el input de límite */
+.form-group input[type="number"] {
+    width: 100%;
+}
+
+
+.fingers-section h3 {
+    color: #FFFFFF;
+    font-family: "Mulish";
+    font-size: 16px;
+    margin-bottom: 1rem;
+}
+
+.fingers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.finger-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.finger-input label {
+    color: #FFFFFF;
+    font-family: "Mulish";
+    font-size: 14px;
+}
+.fingers-section{
+    margin-top: 0px;
+    margin-bottom: 1rem;
+}

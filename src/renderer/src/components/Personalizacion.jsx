@@ -62,10 +62,16 @@ const Personalizado = () => {
         <img src={retrocederIcon} className="retroceder-icon"/>
       </div>
       <h1 className="gesture-titlepersonalizado">RELACIONAR GESTOS CON CONTROLES</h1>
+          
         <div className="bloque">
           <div className="contenedor">
             <div className="gestos">
-              <h2 className="gesture-subtitle">GESTOS</h2>
+              <div className="encabezadogestos">
+                <h2 className="gesture-subtitle">GESTOS</h2>
+                <button className="botonNuevoGesto" onClick={() => navigate("/Crear")}>
+                  + Nuevo Gesto
+                </button>
+              </div>
               {gestureOptions.map((displayName) => (
                 <button
                   key={crypto.randomUUID()}
