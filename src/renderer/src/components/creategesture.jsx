@@ -16,7 +16,48 @@ const HAND_CONNECTIONS = [
     [13, 17], [17, 18], [18, 19], [19, 20], // Meñique
     [0, 17] // Palma
 ];
+/*funcion para dibujar*/
 
+const drawHandLandmarks = (canvasCtx, landmarks) => {
+    // Dibuja las conexiones entre los puntos
+    for (const connection of HAND_CONNECTIONS) {
+        const start = landmarks[connection[0]];
+        const end = landmarks[connection[1]];
+        
+        if (start && end) {
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(start.x * canvasCtx.canvas.width, start.y * canvasCtx.canvas.height);
+            canvasCtx.lineTo(end.x * canvasCtx.canvas.width, end.y * canvasCtx.canvas.height);
+            canvasCtx.strokeStyle = "#00FF00";
+            canvasCtx.lineWidth = 2;
+            canvasCtx.stroke();
+        }
+    }
+
+    // Dibuja los puntos de referencia y los números correspondientes
+    landmarks.forEach((landmark, index) => {
+        const x = landmark.x * canvasCtx.canvas.width;
+        const y = landmark.y * canvasCtx.canvas.height;
+
+        // Dibuja el punto
+        canvasCtx.beginPath();
+        canvasCtx.arc(x, y, 3, 0, 2 * Math.PI);
+        canvasCtx.fillStyle = "#FF0000";
+        canvasCtx.fill();
+
+        // Dibuja el número
+        canvasCtx.font = "12px Arial";
+        canvasCtx.fillStyle = "#FFFFFF";
+        canvasCtx.fillText(index, x + 5, y - 5); // Ajusta la posición del texto
+    });
+};
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+        ...prev,
+        [name]: value
+    }));
+};
 const CreateGesture = () => {
     const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
     const handLandmarkerRef = useHandLandmarker();
@@ -34,62 +75,21 @@ const CreateGesture = () => {
         menique: "1"
     });
 
+    // Mueve esta función dentro del componente
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
             [name]: value
         }));
-    };
-
-    /*funcion para dibujar*/
-
-    const drawHandLandmarks = (canvasCtx, landmarks) => {
-        // Dibuja las conexiones entre los puntos
-        for (const connection of HAND_CONNECTIONS) {
-            const start = landmarks[connection[0]];
-            const end = landmarks[connection[1]];
-            
-            if (start && end) {
-                canvasCtx.beginPath();
-                canvasCtx.moveTo(start.x * canvasCtx.canvas.width, start.y * canvasCtx.canvas.height);
-                canvasCtx.lineTo(end.x * canvasCtx.canvas.width, end.y * canvasCtx.canvas.height);
-                canvasCtx.strokeStyle = "#00FF00";
-                canvasCtx.lineWidth = 2;
-                canvasCtx.stroke();
-            }
-        }
-    
-        // Dibuja los puntos de referencia y los números correspondientes
-        landmarks.forEach((landmark, index) => {
-            const x = landmark.x * canvasCtx.canvas.width;
-            const y = landmark.y * canvasCtx.canvas.height;
-    
-            // Dibuja el punto
-            canvasCtx.beginPath();
-            canvasCtx.arc(x, y, 3, 0, 2 * Math.PI);
-            canvasCtx.fillStyle = "#FF0000";
-            canvasCtx.fill();
-    
-            // Dibuja el número
-            canvasCtx.font = "12px Arial";
-            canvasCtx.fillStyle = "#FFFFFF";
-            canvasCtx.fillText(index, x + 5, y - 5); // Ajusta la posición del texto
-        });
     };
 
     const predictWebcam = useCallback(() => {
         const video = videoRef.current;
         const canvas = document.getElementById("output_canvas");
         const canvasCtx = canvas.getContext("2d");
+
         
-        handleGesturePrediction(
-            handLandmarkerRef,
-            videoRef,
-            configuration.bufferSize,
-            animationFrameRef
-        );
-    
         const detectHands = async () => {
             if (!video.videoWidth) {
                 requestAnimationFrame(detectHands);
@@ -99,34 +99,19 @@ const CreateGesture = () => {
             // Set canvas size to match video dimensions
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-    
-            const results = handLandmarkerRef.current.detectForVideo(video, performance.now());
-            console.log(results)
-            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (results.landmarks) {
-                console.log("entro antes de dibujar");
-                results.landmarks.forEach((landmarks) => {
-                    console.log("se esta dibujando");
-                    console.log(landmarks);
-                    console.log(HAND_CONNECTIONS);
-                    drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
-                        color: "#00FF00",
-                        lineWidth: 5,
-                    });
-                    drawLandmarks(canvasCtx, landmarks, {
-                        color: "#FF0000",
-                        lineWidth: 2,
-                    });
 
+            const results = handLandmarkerRef.current.detectForVideo(video, performance.now());
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (results.landmarks) {
+                results.landmarks.forEach((landmarks) => {
                     drawHandLandmarks(canvasCtx, landmarks);
                 });
-                
             }
-    
+
             animationFrameRef.current = requestAnimationFrame(detectHands);
         };
-    
+
         detectHands();
     }, [handLandmarkerRef, videoRef]);
 
@@ -145,10 +130,59 @@ const CreateGesture = () => {
         setWebcamRunning(!isWebcamRunning);
     };
 
+    const capturarGesto = () => {
+        if (!handLandmarkerRef.current) return;
+    
+        const video = videoRef.current;
+        const canvas = document.getElementById("output_canvas");
+        const canvasCtx = canvas.getContext("2d");
+        
+        // Detener la detección
+        if (animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+        }
+    
+        // Detectar las coordenadas actuales
+        const results = handLandmarkerRef.current.detectForVideo(video, performance.now());
+        if (results.landmarks && results.landmarks.length > 0) {
+            const capturedCoordinates = results.landmarks[0]; // Asumiendo una sola mano detectada
+            console.log("Coordenadas capturadas:", capturedCoordinates);
+    
+            // Guardar las coordenadas en el estado del formulario
+            setFormData((prev) => ({
+                ...prev,
+                capturedCoordinates,
+            }));
+        }
+    
+        // Dibujar el marco congelado en el canvas
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        if (results.landmarks) {
+            results.landmarks.forEach((landmarks) => {
+                drawHandLandmarks(canvasCtx, landmarks);
+            });
+        }
+    };
+    
     const crearNuevoGesto = () => {
         console.log("Nuevo gesto:", formData);
-        // Aquí irá la lógica para crear el gesto
+        // Lógica para enviar la información del formulario, incluidas las coordenadas capturadas
+        fetch("/api/gestures", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Gesto creado con éxito:", data);
+            })
+            .catch((error) => {
+                console.error("Error al crear el gesto:", error);
+            });
     };
+    
 
     return (
         <>
@@ -159,19 +193,14 @@ const CreateGesture = () => {
             <div className="content-container">
                 <div className="left-content">
                     <div className="video-wrapper">
-                        <video 
-                            className="webcam-video" 
-                            autoPlay={true}
-                            id="video"
-                            ref={videoRef}
-                        ></video>
-                        <canvas 
-                            className="hand-canvas" 
-                            id="output_canvas"
-                        ></canvas>
+                        <video className="webcam-video" autoPlay={true} id="video" ref={videoRef} ></video>
+                        <canvas className="hand-canvas" id="output_canvas"></canvas>
                     </div>
                     <button className="Comenzar" id="start" onClick={startDetection}>
-                        CAPTURAR GESTO
+                        COMENZAR
+                    </button>
+                    <button className="Comenzar" id="capturar" onClick={capturarGesto}>
+                        CAPTURAR PANTALLA
                     </button>
                 </div>
                     <div className="right-content">
