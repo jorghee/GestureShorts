@@ -58,7 +58,7 @@ const Personalizado = () => {
 
   return (
     <>
-      <div class="back-button" onClick={() => navigate("/")}>
+      <div className="back-button" onClick={() => navigate("/")}>
         <img src={retrocederIcon} className="retroceder-icon"/>
       </div>
       <h1 className="gesture-titlepersonalizado">RELACIONAR GESTOS CON CONTROLES</h1>

@@ -16,7 +16,6 @@
     box-sizing: border-box; 
 }
 
-
 .titulo {
     color: #ffffff;
     font-size: 40px;
@@ -163,4 +162,96 @@ p {
 .fingers-section{
     margin-top: 0px;
     margin-bottom: 1rem;
+
+}
+
+
+
+.coordenadas{
+    position: absolute;
+    background-color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Changed from center to flex-start */
+    min-height: 100vh; /* Changed from height: 30px */
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Add new video wrapper styles */
+.video-wrapper {
+    position: relative;
+    width: 640px; /* Set a fixed width */
+    height: 480px; /* Set a fixed height */
+    margin-bottom: 1rem;
+}
+
+/* Update video styles */
+.webcam-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+/* Update canvas styles */
+.hand-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+}
+
+/* Update left-content styles */
+.left-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Ensure right-content takes up remaining space */
+.right-content {
+    flex: 1;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+.video-wrapper {
+    position: relative;
+    width: 640px;
+    height: 480px;
+}
+
+.webcam-video, .hand-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(-1);
+}
+
+.hand-canvas {
+    z-index: 1;
 }

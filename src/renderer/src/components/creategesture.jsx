@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import "../assets/create.css";
 import useWebcam from "../hooks/useWebcam.js";
 import useHandLandmarker from "../hooks/useHandLandmarker.js";
@@ -7,6 +7,15 @@ import handleGesturePrediction from "../gestureController/gestureController.js";
 import { useNavigate } from "react-router-dom";
 import Mappings from "./mappings";
 import retrocederIcon from "../assets/images/escape.png";
+import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
+const HAND_CONNECTIONS = [
+    [0, 1], [1, 2], [2, 3], [3, 4],       // Pulgar
+    [0, 5], [5, 6], [6, 7], [7, 8],       // Índice
+    [5, 9], [9, 10], [10, 11], [11, 12],  // Medio
+    [9, 13], [13, 14], [14, 15], [15, 16], // Anular
+    [13, 17], [17, 18], [18, 19], [19, 20], // Meñique
+    [0, 17] // Palma
+];
 
 const CreateGesture = () => {
     const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
@@ -33,13 +42,92 @@ const CreateGesture = () => {
         }));
     };
 
+    /*funcion para dibujar*/
+
+    const drawHandLandmarks = (canvasCtx, landmarks) => {
+        // Dibuja las conexiones entre los puntos
+        for (const connection of HAND_CONNECTIONS) {
+            const start = landmarks[connection[0]];
+            const end = landmarks[connection[1]];
+            
+            if (start && end) {
+                canvasCtx.beginPath();
+                canvasCtx.moveTo(start.x * canvasCtx.canvas.width, start.y * canvasCtx.canvas.height);
+                canvasCtx.lineTo(end.x * canvasCtx.canvas.width, end.y * canvasCtx.canvas.height);
+                canvasCtx.strokeStyle = "#00FF00";
+                canvasCtx.lineWidth = 2;
+                canvasCtx.stroke();
+            }
+        }
+    
+        // Dibuja los puntos de referencia y los números correspondientes
+        landmarks.forEach((landmark, index) => {
+            const x = landmark.x * canvasCtx.canvas.width;
+            const y = landmark.y * canvasCtx.canvas.height;
+    
+            // Dibuja el punto
+            canvasCtx.beginPath();
+            canvasCtx.arc(x, y, 3, 0, 2 * Math.PI);
+            canvasCtx.fillStyle = "#FF0000";
+            canvasCtx.fill();
+    
+            // Dibuja el número
+            canvasCtx.font = "12px Arial";
+            canvasCtx.fillStyle = "#FFFFFF";
+            canvasCtx.fillText(index, x + 5, y - 5); // Ajusta la posición del texto
+        });
+    };
+
     const predictWebcam = useCallback(() => {
+        const video = videoRef.current;
+        const canvas = document.getElementById("output_canvas");
+        const canvasCtx = canvas.getContext("2d");
+        
         handleGesturePrediction(
             handLandmarkerRef,
             videoRef,
             configuration.bufferSize,
             animationFrameRef
         );
+    
+        const detectHands = async () => {
+            if (!video.videoWidth) {
+                requestAnimationFrame(detectHands);
+                return;
+            }
+
+            // Set canvas size to match video dimensions
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+    
+            const results = handLandmarkerRef.current.detectForVideo(video, performance.now());
+            console.log(results)
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (results.landmarks) {
+                console.log("entro antes de dibujar");
+                results.landmarks.forEach((landmarks) => {
+                    console.log("se esta dibujando");
+                    console.log(landmarks);
+                    console.log(HAND_CONNECTIONS);
+                    drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {
+                        color: "#00FF00",
+                        lineWidth: 5,
+                    });
+                    drawLandmarks(canvasCtx, landmarks, {
+                        color: "#FF0000",
+                        lineWidth: 2,
+                    });
+
+                    drawHandLandmarks(canvasCtx, landmarks);
+                });
+                
+            }
+    
+            animationFrameRef.current = requestAnimationFrame(detectHands);
+        };
+    
+        detectHands();
     }, [handLandmarkerRef, videoRef]);
 
     const startDetection = () => {
@@ -67,13 +155,25 @@ const CreateGesture = () => {
             <div className="back-button" onClick={() => navigate("/")}>
                 <img src={retrocederIcon} className="retroceder-icon" alt="Retroceder"/>
             </div>
-            <body>
-                <div className="content-container">
-                    <div className="left-content">
-                        <video autoPlay={true} width={200} height={100} id="video"></video>
-                        <button className="Comenzar" id="start" onClick={startDetection}>
-                        CAPTURAR GESTO</button>
+            
+            <div className="content-container">
+                <div className="left-content">
+                    <div className="video-wrapper">
+                        <video 
+                            className="webcam-video" 
+                            autoPlay={true}
+                            id="video"
+                            ref={videoRef}
+                        ></video>
+                        <canvas 
+                            className="hand-canvas" 
+                            id="output_canvas"
+                        ></canvas>
                     </div>
+                    <button className="Comenzar" id="start" onClick={startDetection}>
+                        CAPTURAR GESTO
+                    </button>
+                </div>
                     <div className="right-content">
                         <h1 className="titulo">CREA UN NUEVO GESTO</h1>
                         <div className="form-container">
@@ -138,7 +238,7 @@ const CreateGesture = () => {
                                                 value={formData.indice}
                                                 onChange={handleInputChange}
                                             >
-                                                {[1, 2, 3, 4].map(num => (
+                                                {[6, 7, 8].map(num => (
                                                     <option key={num} value={num}>{num}</option>
                                                 ))}
                                             </select>
@@ -151,7 +251,7 @@ const CreateGesture = () => {
                                                 value={formData.medio}
                                                 onChange={handleInputChange}
                                             >
-                                                {[1, 2, 3, 4].map(num => (
+                                                {[10, 11, 12].map(num => (
                                                     <option key={num} value={num}>{num}</option>
                                                 ))}
                                             </select>
@@ -164,7 +264,7 @@ const CreateGesture = () => {
                                                 value={formData.anular}
                                                 onChange={handleInputChange}
                                             >
-                                                {[1, 2, 3, 4].map(num => (
+                                                {[14, 15, 16].map(num => (
                                                     <option key={num} value={num}>{num}</option>
                                                 ))}
                                             </select>
@@ -177,7 +277,7 @@ const CreateGesture = () => {
                                                 value={formData.menique}
                                                 onChange={handleInputChange}
                                             >
-                                                {[1, 2, 3, 4].map(num => (
+                                                {[18, 19, 20].map(num => (
                                                     <option key={num} value={num}>{num}</option>
                                                 ))}
                                             </select>
@@ -191,7 +291,7 @@ const CreateGesture = () => {
                         </button>
                     </div>
                 </div>
-            </body>
+            
         </>
     );
 };
