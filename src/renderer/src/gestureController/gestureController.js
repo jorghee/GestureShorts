@@ -111,57 +111,59 @@ const handleGesturePrediction = (
         videoRef.current,
         startTimeMs
       );
-    }
+    
     //actualizat los hlm
     //proceso en el que obtenemos el gesto que esta realizando el usuario
     //
-    let found = "";
-    let i = 0;
-    while(i < availableGestures.length){
-      //encontramos un gesto que se parezca al gesto actual, si es que se puede
-      if(newResults.handLandmarkerRef[0].handedness == 1){
-        break;
-      }
-      //encontramos indice de parecido
-      let currentGesture = availableGestures[i];
-      //podemos descriibir el estado de mano como: izquierda o derecha, limit, [puntos de referencia], anchor
-      let origin = newResults.landmarks[0];
-      let scale = DistBetweenPoints(newResults.landmarks[4], origin);
-      scale = currentGesture.scale / scale;
-      let thumbx = (newResults.landmarks[currentGesture.fingerIndex[0]].x - origin.x) * scale;
-      let thumby = (newResults.landmarks[currentGesture.fingerIndex[0]].y - origin.y) * scale;
-      //high perturbation 1.2
-      let perturbation = (thumbx - currentGesture.fingerLengthx[0]);
-      perturbation += (thumby - currentGesture.fingerLengthy[0]);
-      perturbation *= 1.2;
-      let indexx = (newResults.landmarks[currentGesture.fingerIndex[1]].x - origin.x) * scale;
-      let indexy = (newResults.landmarks[currentGesture.fingerIndex[1]].y - origin.y) * scale;
-      perturbation += (indexx - currentGesture.fingerLengthx[1]);
-      perturbation += (indexy - currentGesture.fingerLengthy[1]);
-      let middlex = (newResults.landmarks[currentGesture.fingerIndex[2]].x - origin.x) * scale;
-      let middley = (newResults.landmarks[currentGesture.fingerIndex[2]].y - origin.y) * scale;
-      perturbation += (middlex - currentGesture.fingerLengthx[2]);
-      perturbation += (middley - currentGesture.fingerLengthy[2]);
-      //low perturbation *0.8
-      let ringx = (newResults.landmarks[currentGesture.fingerIndex[3]].x - origin.x) * scale;
-      let ringy = (newResults.landmarks[currentGesture.fingerIndex[3]].y - origin.y) * scale;
+      let found = "";
+      let i = 0;
+      while(i < availableGestures.length){
+        //encontramos un gesto que se parezca al gesto actual, si es que se puede
+        if(newResults.handLandmarkerRef[0].handedness == 1){
+          break;
+        }
+        //encontramos indice de parecido
+        let currentGesture = availableGestures[i];
+        //podemos descriibir el estado de mano como: izquierda o derecha, limit, [puntos de referencia], anchor
+        let origin = newResults.landmarks[0];
+        let scale = DistBetweenPoints(newResults.landmarks[4], origin);
+        scale = currentGesture.scale / scale;
+        let thumbx = (newResults.landmarks[currentGesture.fingerIndex[0]].x - origin.x) * scale;
+        let thumby = (newResults.landmarks[currentGesture.fingerIndex[0]].y - origin.y) * scale;
+        //high perturbation 1.2
+        let perturbation = (thumbx - currentGesture.fingerLengthx[0]);
+        perturbation += (thumby - currentGesture.fingerLengthy[0]);
+        perturbation *= 1.2;
+        let indexx = (newResults.landmarks[currentGesture.fingerIndex[1]].x - origin.x) * scale;
+        let indexy = (newResults.landmarks[currentGesture.fingerIndex[1]].y - origin.y) * scale;
+        perturbation += (indexx - currentGesture.fingerLengthx[1]);
+        perturbation += (indexy - currentGesture.fingerLengthy[1]);
+        let middlex = (newResults.landmarks[currentGesture.fingerIndex[2]].x - origin.x) * scale;
+        let middley = (newResults.landmarks[currentGesture.fingerIndex[2]].y - origin.y) * scale;
+        perturbation += (middlex - currentGesture.fingerLengthx[2]);
+        perturbation += (middley - currentGesture.fingerLengthy[2]);
+        //low perturbation *0.8
+        let ringx = (newResults.landmarks[currentGesture.fingerIndex[3]].x - origin.x) * scale;
+        let ringy = (newResults.landmarks[currentGesture.fingerIndex[3]].y - origin.y) * scale;
 
-      let perturbationW = (ringx - currentGesture.fingerLengthx[2]);
-      perturbationW += (ringy - currentGesture.fingerLengthy[2]);
-      perturbationW *= 0.8;
-      perturbation += perturbationW;
-      let pinkiex = (newResults.landmarks[currentGesture.fingerIndex[4]].x - origin.x) * scale;
-      let pinkiey = (newResults.landmarks[currentGesture.fingerIndex[4]].y - origin.y) * scale;
-      perturbation += (pinkiex - currentGesture.fingerLengthx[2]);
-      perturbation += (pinkiey - currentGesture.fingerLengthy[2]);
-      if(perturbation <= currentGesture.limit){
-        found = currentGesture.name;
-        break;
+        let perturbationW = (ringx - currentGesture.fingerLengthx[2]);
+        perturbationW += (ringy - currentGesture.fingerLengthy[2]);
+        perturbationW *= 0.8;
+        perturbation += perturbationW;
+        let pinkiex = (newResults.landmarks[currentGesture.fingerIndex[4]].x - origin.x) * scale;
+        let pinkiey = (newResults.landmarks[currentGesture.fingerIndex[4]].y - origin.y) * scale;
+        perturbation += (pinkiex - currentGesture.fingerLengthx[2]);
+        perturbation += (pinkiey - currentGesture.fingerLengthy[2]);
+        if(perturbation <= currentGesture.limit){
+          found = currentGesture.name;
+          break;
+        }
+        i++;
       }
-      i++;
-    }
-    if(!(found === hugger)){
-      window.api.executeInVm(availableGestures[i].comando);//found es el nombre de la funcion
+      if(!(found === hugger)){
+        window.api.executeInVm(availableGestures[i].comando);//found es el nombre de la funcion
+        hugger.current = found;
+      }
     }
   }
 };

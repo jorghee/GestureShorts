@@ -17,6 +17,7 @@ const Rehabilitacion = () => {
     const navigate = useNavigate();
     const hugger = useRef("");
 
+
     const predictWebcam = useCallback(() => {
         handleGesturePrediction(
         handLandmarkerRef,
@@ -51,6 +52,8 @@ const Rehabilitacion = () => {
                 <img src={retrocederIcon} className="retroceder-icon"/>
             </div>
             <body>
+
+                
                 <div className="content-container">
                 <div className="left-content">
                     <h1 className="titulo">GESTURE SHORTS</h1>
@@ -64,6 +67,8 @@ const Rehabilitacion = () => {
                     <video autoPlay={true} width={200} height={100} id="video"></video>
                 </div>
                 </div>
+
+
             </body>
         </>
     );

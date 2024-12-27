@@ -7,7 +7,7 @@ import ac from "./controls/availableControls.js";
 import ag from "./gestures/availableGestures.js";
 import { moveMouse } from "./controls/mouseTracking.js";
 
-import { saveMappings, loadMappings } from "./mappingHandler/mappingHandler.js";
+import { saveMappings, loadMappings, saveCustom, loadCustom, saveInstruction, loadInstruction } from "./mappingHandler/mappingHandler.js";
 
 function createWindow() {
   // Create the browser window.
@@ -72,6 +72,37 @@ app.whenReady().then(() => {
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
+    }
+  });
+  ipcMain.handle("saveCustom", async (event, newCustom) => {
+    try {
+      await saveCustom(newCustom);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  });
+  ipcMain.handle("loadCustom", async () => {
+    try {
+      return await loadMappings(ag, ac);
+    } catch (error) {
+      return { error: error.message };
+    }
+  });
+
+  ipcMain.handle("saveInstruction", async (event, newCustom) => {
+    try {
+      await saveCustom(newCustom);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  });
+  ipcMain.handle("loadInstruction", async () => {
+    try {
+      return await loadMappings(ag, ac);
+    } catch (error) {
+      return { error: error.message };
     }
   });
 

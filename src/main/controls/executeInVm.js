@@ -9,8 +9,10 @@ const context = vm.createContext({
   console,
 });
 
-const script = new vm.Script(userCode);
 
-cont 
+const runCommand = async (userCode) =>{
+  const script = new vm.Script(userCode);
+  script.runInContext(context);
+}
 
-script.runInContext(context);
+export default runCommand;
