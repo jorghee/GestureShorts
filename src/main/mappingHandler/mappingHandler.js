@@ -69,26 +69,26 @@ const saveInstruction = (name, newInstruction) => {
     }
     fullInstrucions[name] = newInstruction;
     fs.writeFileSync(customInstructionsPath, JSON.stringify(fullInstrucions, null, 2), "utf8");
-    console.log("Stored successfully in:", mappingsPath);
+    console.log("Stored successfully in:", customInstructionsPath);
   } catch (error) {
     console.log("Error saving  mappings", error);
   }
 }
-const loadInstruction = (newHstate) => {
+const loadInstruction = () => {
   try {
     ensureDirExists(path.dirname(customInstructionsPath));
-    if (fs.existsSync(mappingsPath)) {
-      const rawData = fs.readFileSync(mappingsPath, "utf8");
+    if (fs.existsSync(customInstructionsPath)) {
+      const rawData = fs.readFileSync(customInstructionsPath, "utf8");
       const jsonObject = JSON.parse(rawData);
-      return new Map(Object.entries(jsonObject));
+      return jsonObject;
     } else {
       console.log("JSON file not found. Generating empty map...");
-
-      return generateDefaultMappings(ag, ac);
+      fs.writeFileSync(customHstatesPath, JSON.stringify({}, null, 2), "utf8");
+      return {};
     }
   } catch (error) {
     console.log("Error loading mappings:", error);
-    return generateDefaultMappings(ag, ac);
+    return {};
   }
 }
 
@@ -103,7 +103,7 @@ const saveMappings = (mappings) => {
   }
 };
 
-const loadMappings = () => {
+const loadMappings = (ag, ac) => {
   try {
     ensureDirectoryExists();
     if (fs.existsSync(mappingsPath)) {
@@ -112,7 +112,6 @@ const loadMappings = () => {
       return new Map(Object.entries(jsonObject));
     } else {
       console.log("JSON file not found. Generating default mappings...");
-
       return generateDefaultMappings(ag, ac);
     }
   } catch (error) {
