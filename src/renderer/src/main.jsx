@@ -15,9 +15,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<CreateGesture />} />
+        <Route path="/" element={<App />} />
+        <Route path="/customMode" element={<Rehabilitacion custom/>} />
         <Route path="/Personalizado" element={<Personalizado />} />
-        <Route path="/Rehabilitacion" element={<Rehabilitacion />} />
+        <Route path="/Rehabilitacion" element={<Rehabilitacion custom={false}/>} />
         <Route path="/Custom" element={<CreateGesture />} />
       </Routes>
     </BrowserRouter>

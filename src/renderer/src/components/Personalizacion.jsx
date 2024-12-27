@@ -4,7 +4,7 @@ import "../assets/personalizacion.css";
 import Mappings from "./mappings";
 import retrocederIcon from "../assets/images/escape.png";
 
-const Personalizado = () => {
+const Personalizado = (props) => {
   const navigate = useNavigate();
   const [gestureOptions, setGestureOptions] = useState([]);
   const [controlOptions, setControlOptions] = useState([]);

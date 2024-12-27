@@ -35,6 +35,18 @@ const App = () => {
               <label htmlFor="custom">Modo Personalizable</label>
             </div>
           </div>
+          {/* <div className="input-container">
+            <input
+              id="custom"
+              type="radio"
+              name="radio"
+              onChange={() => (link = "/customization")}
+            />
+            <div className="radio-tile">
+              <ion-icon name="trending-up-outline"></ion-icon>
+              <label htmlFor="custom">Modo Personalizable</label>
+            </div>
+          </div> */}
         </div>
 
         <div className="buttons-container">

@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 import Mappings from "./mappings";
 import retrocederIcon from "../assets/images/escape.png";
 
-const Rehabilitacion = () => {
+
+const Rehabilitacion = (props) => {
     const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
     const handLandmarkerRef = useHandLandmarker();
     const animationFrameRef = useRef(null); 
@@ -20,11 +21,11 @@ const Rehabilitacion = () => {
 
     const predictWebcam = useCallback(() => {
         handleGesturePrediction(
-        handLandmarkerRef,
-        videoRef,
-        configuration.bufferSize,
-        animationFrameRef,
-        hugger
+            handLandmarkerRef,
+            videoRef,
+            configuration.bufferSize,
+            animationFrameRef,
+            props.custom,
         );
     }, [handLandmarkerRef, videoRef]);
 
@@ -33,11 +34,12 @@ const Rehabilitacion = () => {
         console.log("Wait! handLandmarker not loaded yet.");
         return;
         }
-
+        console.log("Empezando rutina de deteccion")
         if (isWebcamRunning) {
-        predictWebcam();
+            
+            predictWebcam();
         } else if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+            cancelAnimationFrame(animationFrameRef.current);
         }
 
         const startButton = document.getElementById("start");
@@ -48,12 +50,12 @@ const Rehabilitacion = () => {
 
     return (
         <>
-            <div class="back-button" onClick={() => navigate("/")}>
+            <div className="back-button" onClick={() => navigate("/")}>
                 <img src={retrocederIcon} className="retroceder-icon"/>
             </div>
             <body>
 
-                
+
                 <div className="content-container">
                 <div className="left-content">
                     <h1 className="titulo">GESTURE SHORTS</h1>

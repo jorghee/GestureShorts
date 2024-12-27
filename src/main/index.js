@@ -8,6 +8,7 @@ import ag from "./gestures/availableGestures.js";
 import { moveMouse } from "./controls/mouseTracking.js";
 
 import { saveMappings, loadMappings, saveCustom, loadCustom, saveInstruction, loadInstruction } from "./mappingHandler/mappingHandler.js";
+import runCommand  from "./controls/executeInVm.js";
 
 function createWindow() {
   // Create the browser window.
@@ -74,9 +75,9 @@ app.whenReady().then(() => {
       return { success: false, error: error.message };
     }
   });
-  ipcMain.handle("saveCustom", async (event, newCustom) => {
+  ipcMain.handle("saveCustom", async (event,name, newCustom) => {
     try {
-      await saveCustom(newCustom);
+      await saveCustom(name, newCustom);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -84,7 +85,7 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("loadCustom", async () => {
     try {
-      return await loadMappings(ag, ac);
+      return await loadCustom();
     } catch (error) {
       return { error: error.message };
     }
@@ -92,7 +93,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle("saveInstruction", async (event, newCustom) => {
     try {
-      await saveCustom(newCustom);
+      await saveInstruction(newCustom);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -100,7 +101,7 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("loadInstruction", async () => {
     try {
-      return await loadMappings(ag, ac);
+      return await loadInstruction(ag, ac);
     } catch (error) {
       return { error: error.message };
     }
@@ -119,7 +120,7 @@ app.whenReady().then(() => {
     });
   }
   ipcMain.handle("executeInVm", async (event, command)=> {
-    
+    runCommand(command);
   }
 );
 

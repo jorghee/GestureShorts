@@ -7,6 +7,7 @@
   box-sizing: border-box;
 }
 
+
 .left-content,
 .right-content {
   flex: 1;
@@ -255,3 +256,35 @@ p {
 .hand-canvas {
   z-index: 1;
 }
+
+.text-field {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin: 10px;
+}
+
+.text-field label {
+  font-weight: bold;
+  color: white; 
+  margin-bottom: 5px;
+}
+
+.text-field textarea {
+  resize: vertical; /* Allows user to resize vertically */
+  width: 100%;
+  height: calc(1.5em * 4); /* Approx height for 4 lines of text */
+  padding: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensures padding doesn't affect width/height */
+}
+
+.text-field textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+

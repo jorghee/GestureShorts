@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Mappings from "./mappings";
 import retrocederIcon from "../assets/images/escape.png";
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
+import { format } from "path-browserify";
 
 
 const HAND_CONNECTIONS = [
@@ -67,16 +68,21 @@ const CreateGesture = () => {
     const animationFrameRef = useRef(null);
     const navigate = useNavigate();
 
+
     const [formData, setFormData] = useState({
         gestureName: "",
         command: "",
-        limit: "0.5",
-        type: 0,
-        pulgar: "1",
-        indice: "1",
-        medio: "1",
-        anular: "1",
-        menique: "1"
+        limit: 0.05,
+        handedness: 0,
+        scale: 0,
+        pulgar: 4,
+        indice: 8,
+        medio: 12,
+        anular: 16,
+        menique: 20,
+        fingerLengthx: [],
+        fingerLengthy: [],
+        landmarks: []
     });
 
     // Mueve esta función dentro del componente
@@ -147,15 +153,31 @@ const CreateGesture = () => {
         }
     
         // Detectar las coordenadas actuales
+        console.log("intentando obtener los resultados");
         const results = handLandmarkerRef.current.detectForVideo(video, performance.now());
+        console.log("si hay resultados hlm");
+        console.log(results);
         if (results.landmarks && results.landmarks.length > 0) {
             const capturedCoordinates = results.landmarks[0]; // Asumiendo una sola mano detectada
-            console.log("Coordenadas capturadas:", capturedCoordinates);
-    
+            //console.log("Coordenadas capturadas:", capturedCoordinates);
             // Guardar las coordenadas en el estado del formulario
+            
             setFormData((prev) => ({
                 ...prev,
-                capturedCoordinates,
+                limit: parseFloat(formData.limit),
+                landmarks: capturedCoordinates,
+                fingerLengthx : [capturedCoordinates[prev.pulgar].x - capturedCoordinates[0].x,
+                capturedCoordinates[prev.indice].x - capturedCoordinates[0].x,
+                capturedCoordinates[prev.medio].x - capturedCoordinates[0].x,
+                capturedCoordinates[prev.anular].x - capturedCoordinates[0].x,
+                capturedCoordinates[prev.menique].x - capturedCoordinates[0].x
+                   ],
+                fingerLengthy : [capturedCoordinates[prev.pulgar].y - capturedCoordinates[0].y,
+                capturedCoordinates[prev.indice].y - capturedCoordinates[0].y,
+                capturedCoordinates[prev.medio].y - capturedCoordinates[0].y,
+                capturedCoordinates[prev.anular].y - capturedCoordinates[0].y,
+                capturedCoordinates[prev.menique].y - capturedCoordinates[0].y],
+                handedness: results.handedness[0][0].index
             }));
         }
     
@@ -167,12 +189,19 @@ const CreateGesture = () => {
             });
         }
     };
+    const startTracking = () =>{
+      navigate("/customMode");
+    }
     
     const crearNuevoGesto = () => {
         console.log("Nuevo gesto:", formData);
         // Lógica para enviar la información del formulario, incluidas las coordenadas capturadas
-        window.api.CreateGesture();
-
+        //calcular la escala
+        const newGesture = { ...formData,
+            scale: DistBetweenPoints(formData.landmarks[formData.pulgar], formData.landmarks[0]),
+            }
+        //
+        window.api.saveCustom(formData.gestureName ,newGesture);
 
         // fetch("/api/gestures", {
         //     method: "POST",
@@ -209,11 +238,17 @@ const CreateGesture = () => {
                     <button className="Comenzar" id="capturar" onClick={capturarGesto}>
                         CAPTURAR PANTALLA
                     </button>
+                    <button className="Comenzar" id="startTracking" onClick={startTracking}>
+                        EMPEZAR TRACKING
+                    </button>
                 </div>
+
                     <div className="right-content">
                         <h1 className="titulo">CREA UN NUEVO GESTO</h1>
                         <div className="form-container">
                             <form className="gesture-form">
+
+
                                 <div className="form-group">
                                     <label>Nombre del Gesto:</label>
                                     <input
@@ -223,7 +258,12 @@ const CreateGesture = () => {
                                         onChange={handleInputChange}
                                     />
                                 </div>
-
+                                <div className="text-field">
+                                  <label >Command</label>
+                                  <textarea id="command" name="command" rows="4" 
+                                  value={formData.command} onChange={handleInputChange}
+                                  placeholder="Enter your command here..."></textarea>
+                                </div>
                                 <div className="inline-container">
                                     <div className="form-group">
                                         <label>Límite:</label>
@@ -232,23 +272,13 @@ const CreateGesture = () => {
                                             name="limit"
                                             min="0"
                                             max="1"
-                                            step="0.1"
+                                            step="0.01"
                                             value={formData.limit}
                                             onChange={handleInputChange}
                                         />
                                     </div>
 
-                                    <div className="form-group">
-                                        <label>Tipo:</label>
-                                        <select
-                                            name="type"
-                                            value={formData.type}
-                                            onChange={handleInputChange}
-                                        >
-                                            <option value="derecha">Derecha</option>
-                                            <option value="izquierda">Izquierda</option>
-                                        </select>
-                                    </div>
+                                    
                                 </div>
 
                                 <div className="fingers-section">
@@ -261,7 +291,7 @@ const CreateGesture = () => {
                                                 value={formData.pulgar}
                                                 onChange={handleInputChange}
                                             >
-                                                {[1, 2, 3, 4].map(num => (
+                                                {[3, 4].map(num => (
                                                     <option key={num} value={num}>{num}</option>
                                                 ))}
                                             </select>
@@ -322,6 +352,7 @@ const CreateGesture = () => {
                                 </div>
                             </form>
                         </div>
+
                         <button className="Comenzar" onClick={crearNuevoGesto}>
                             CREAR GESTO
                         </button>
@@ -331,5 +362,15 @@ const CreateGesture = () => {
         </>
     );
 };
+
+function DistBetweenPoints(a, b){
+  let ax = a.x;
+  let ay = a.y;
+  let bx = b.x;
+  let by = b.y;
+  a = ax - bx;
+  b = ay - by;
+  return Math.sqrt(a*a + b*b);
+}
 
 export default CreateGesture;

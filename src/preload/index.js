@@ -14,7 +14,8 @@ const api = {
   saveMappings: (newMappings) => ipcRenderer.invoke("saveMappings", newMappings),
   //cargar y guardar los custom gestures
   loadCustom: () => ipcRenderer.invoke("loadCustom"),
-  saveCustom: (newCustom) => ipcRenderer.invoke("saveCustom", newCustom),
+  saveCustom: (name, newCustom) => ipcRenderer.invoke("saveCustom", name, newCustom),
+  executeInVm: (command) => ipcRenderer.invoke("executeInVm",command),
 };
 
 for (const [controlStr] of ac.entries()) {

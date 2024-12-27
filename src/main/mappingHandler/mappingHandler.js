@@ -8,10 +8,10 @@ const mappingsPath = path.join(
 
 const customHstatesPath = path.join(
   __dirname, "../../renderer/custom/hstates.json"
-)
+);
 const customInstructionsPath = path.join(
   __dirname, "../../renderer/custom/instructions.json"
-)
+);
 
 const ensureDirectoryExists = () => {
   const dirPath = path.dirname(mappingsPath);
@@ -27,8 +27,10 @@ const ensureDirExists = (dir) =>{
 
 const saveCustom = (name, newHstate) => {
   try {
-    ensureDirExists(customHstatesPath.dirname);
+    ensureDirExists(path.dirname(customHstatesPath));
     let fullCustomGestures = {};
+    console.log("Intentando guardar el siguiente objeto:");
+    console.log(newHstate);
     if(fs.existsSync(customHstatesPath)){
       const rawData = fs.readFileSync(customHstatesPath, "utf8");
       const jsonObject = JSON.parse(rawData);
@@ -36,16 +38,16 @@ const saveCustom = (name, newHstate) => {
     }
     fullCustomGestures[name] = newHstate;
     fs.writeFileSync(customHstatesPath, JSON.stringify(fullCustomGestures, null, 2), "utf8");
-    console.log("Stored successfully in:", mappingsPath);
+    console.log("Stored successfully in:", customHstatesPath);
   } catch (error) {
     console.log("Error saving  mappings", error);
   }
 }
 const loadCustom = () => {
   try {
-    ensureDirExists(path.dirname(customInstructionsPath));
-    if (fs.existsSync(mappingsPath)) {
-      const rawData = fs.readFileSync(mappingsPath, "utf8");
+    ensureDirExists(path.dirname(customHstatesPath));
+    if (fs.existsSync(customHstatesPath)) {
+      const rawData = fs.readFileSync(customHstatesPath, "utf8");
       const jsonObject = JSON.parse(rawData);
       return jsonObject;
     } else {
@@ -60,7 +62,7 @@ const loadCustom = () => {
 }
 const saveInstruction = (name, newInstruction) => {
   try {
-    ensureDirExists(customInstructionsPath.dirname);
+    ensureDirExists(path.dirname(customInstructionsPath));
     let fullInstrucions = {};
     if(fs.existsSync(customInstructionsPath)){
       const rawData = fs.readFileSync(customInstructionsPath, "utf8");
