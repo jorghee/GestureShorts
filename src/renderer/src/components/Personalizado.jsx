@@ -60,6 +60,7 @@ const drawHandLandmarks = (canvasCtx, landmarks) => {
 //         [name]: value
 //     }));
 // };
+
 const CreateGesture = () => {
     const { isWebcamRunning, setWebcamRunning, videoRef } = useWebcam("video");
     const handLandmarkerRef = useHandLandmarker();
@@ -68,8 +69,9 @@ const CreateGesture = () => {
 
     const [formData, setFormData] = useState({
         gestureName: "",
+        command: "",
         limit: "0.5",
-        type: "derecha",
+        type: 0,
         pulgar: "1",
         indice: "1",
         medio: "1",
@@ -169,23 +171,23 @@ const CreateGesture = () => {
     const crearNuevoGesto = () => {
         console.log("Nuevo gesto:", formData);
         // Lógica para enviar la información del formulario, incluidas las coordenadas capturadas
+        window.api.CreateGesture();
 
-        
 
-        fetch("/api/gestures", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Gesto creado con éxito:", data);
-            })
-            .catch((error) => {
-                console.error("Error al crear el gesto:", error);
-            });
+        // fetch("/api/gestures", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(formData),
+        // })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log("Gesto creado con éxito:", data);
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error al crear el gesto:", error);
+        //     });
     };
     
 

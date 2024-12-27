@@ -83,7 +83,7 @@ const loadInstruction = () => {
       return jsonObject;
     } else {
       console.log("JSON file not found. Generating empty map...");
-      fs.writeFileSync(customHstatesPath, JSON.stringify({}, null, 2), "utf8");
+      fs.writeFileSync(customInstructionsPath, JSON.stringify({}, null, 2), "utf8");
       return {};
     }
   } catch (error) {
